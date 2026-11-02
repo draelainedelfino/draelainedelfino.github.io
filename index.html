@@ -1,0 +1,1705 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Prontuário · Dra. Elaine Delfino</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Agenda à esquerda, calendário à direita; prontuário abre numa gaveta lateral com abas */
+  /* Identidade de clínica dermatológica: sempre clara, branco com dourado (sem modo escuro, por escolha) */
+  :root {
+    --bg: #faf9f7;
+    --surface: #ffffff;
+    --surface-2: #fcfbf8;
+    --stripe: #f4f1ea;
+    --border: #ece7dc;
+    --border-strong: #dcd3c1;
+    --text: #2a2620;
+    --muted: #7b7366;
+    --faint: #a89f8f;
+    --out: #d3cbbb;
+    --accent: #a8843f;
+    --accent-soft: #f7f0e1;
+    --accent-ink: #7a5c22;
+    --btn: #96752f;
+    --btn-hover: #7a5c22;
+    --on-accent: #ffffff;
+    --gold-line: linear-gradient(90deg, #c9a75e, #e8d39c 50%, #b08b45);
+    --danger: #b9473e;
+    --danger-soft: #fbeeec;
+    --good: #3f7d4e;
+    --good-soft: #e9f3ea;
+    --warn: #8f630f;
+    --warn-soft: #fbf1dc;
+    --ink: #96752f;
+    --on-ink: #ffffff;
+    --scrim: rgba(42,38,32,.28);
+    --toast-bg: #2a2620;
+    --toast-fg: #ffffff;
+    --display: "Cormorant Garamond", "Cormorant", Georgia, "Times New Roman", serif;
+    --radius: 12px;
+    --shadow: 0 1px 2px rgba(90,70,30,.04), 0 1px 3px rgba(90,70,30,.06);
+    --shadow-lg: 0 20px 40px -12px rgba(90,70,30,.18);
+    color-scheme: light;
+  }
+  header::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--gold-line); }
+  h1 { font-family: var(--display); font-weight: 600 !important; letter-spacing: 0 !important; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  img { max-width: 100%; }
+  :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font: 14px/1.5 Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  svg { width: 18px; height: 18px; flex: none; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* Barras de rolagem discretas; com a gaveta ou uma janela aberta, a página de trás não rola */
+  * { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 8px; }
+  ::-webkit-scrollbar-button { display: none; }
+  html.travado, html.travado body { overflow: hidden; }
+
+  /* Header */
+  header { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; }
+  .bar { max-width: 1180px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; gap: 32px; }
+  .brand { display: flex; align-items: center; gap: 7px; font-family: var(--display); font-weight: 600; font-size: 16px; letter-spacing: .02em; color: var(--accent-ink); flex: none; }
+  .brand-mark { width: 22px; height: 22px; border-radius: 50%; background: var(--gold-line); color: var(--on-accent); display: grid; place-items: center; }
+  .brand-mark svg { width: 13px; height: 13px; }
+  .brand { gap: 10px; }
+  .avatar.foto { width: 42px; height: 42px; object-fit: cover; padding: 0; box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px #c9a75e; }
+  .brand-logo { width: 52px; height: 52px; object-fit: contain; display: block; }
+  nav { display: flex; gap: 6px; }
+  nav button { border: 0; background: none; padding: 11px 18px; border-radius: 10px; cursor: pointer; color: var(--muted); font-weight: 550; font-size: 15px; display: flex; align-items: center; gap: 9px; }
+  nav button svg { width: 21px; height: 21px; }
+  nav button:hover { background: var(--bg); color: var(--text); }
+  nav button.active { background: var(--accent-soft); color: var(--accent-ink); }
+  .who { margin-left: auto; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 13px; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-ink); display: grid; place-items: center; font-weight: 600; font-size: 12px; flex: none; }
+
+  /* Barra fixa no rodapé com o botão Salvar */
+  body { padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px)); }
+  .savebar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: var(--surface); border-top: 1px solid var(--border); box-shadow: 0 -4px 12px rgba(16,24,40,.06); padding-top: 12px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .savebar-in { max-width: 1132px; margin: 0 auto; display: flex; align-items: center; justify-content: flex-end; gap: 14px; }
+  .savebar-in .sub { margin: 0; text-align: right; }
+  .btn.save { padding: 10px 26px; font-weight: 600; justify-content: center; min-width: 150px; }
+  .btn.save.err { color: var(--danger); border-color: var(--danger); background: var(--danger-soft); }
+  @media (max-width: 600px) { .savebar-in { justify-content: space-between; } .btn.save { flex: 1; max-width: 220px; } }
+  main { max-width: 1180px; margin: 0 auto; padding: 28px 24px 60px; }
+  .page-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  h1 { font-size: 22px; letter-spacing: -.02em; margin: 0; font-weight: 650; text-wrap: balance; }
+  h2 { font-size: 15px; margin: 0; font-weight: 600; }
+  .sub { color: var(--muted); font-size: 13px; margin-top: 2px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .card-head { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .card-body { padding: 20px; }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border-strong); background: var(--surface); padding: 8px 14px; border-radius: 9px; cursor: pointer; font-weight: 500; transition: background .15s, border-color .15s; }
+  .btn:hover { background: var(--bg); }
+  .btn.primary { background: var(--btn); border-color: var(--btn); color: var(--on-accent); }
+  .btn.primary:hover { background: var(--btn-hover); border-color: var(--btn-hover); }
+  .btn.ghost { border-color: transparent; background: none; }
+  .btn.ghost:hover { background: var(--bg); }
+  .btn.danger { color: var(--danger); }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .icon-btn { border: 0; background: none; width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; cursor: pointer; color: var(--muted); flex: none; }
+  .icon-btn:hover { background: var(--bg); color: var(--text); }
+  .icon-btn:disabled { opacity: .35; cursor: default; }
+
+  /* Forms */
+  label.f { display: block; font-size: 12px; font-weight: 500; color: var(--muted); margin-bottom: 6px; }
+  .input, select.input, textarea.input { width: 100%; border: 1px solid var(--border-strong); background: var(--surface); border-radius: 9px; padding: 9px 12px; outline: none; transition: border-color .15s, box-shadow .15s; }
+  .input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  textarea.input { resize: vertical; min-height: 76px; line-height: 1.55; }
+  .grid { display: grid; gap: 16px; }
+  .g2 { grid-template-columns: 1fr 1fr; }
+  .g3 { grid-template-columns: repeat(3, 1fr); }
+
+  /* Agenda */
+  .agenda { display: grid; grid-template-columns: 1fr 320px; gap: 20px; align-items: start; }
+  .daynav { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .slot { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 16px; padding: 12px 20px; border-bottom: 1px solid var(--border); min-height: 60px; }
+  .slot:last-child { border-bottom: 0; }
+  .slot .time { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .slot.free .time { color: var(--faint); font-weight: 500; }
+  .slot.free .add { opacity: 0; color: var(--accent); font-weight: 500; font-size: 13px; border: 0; background: none; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 4px 0; }
+  .slot.free:hover { background: var(--surface-2); }
+  .slot.free:hover .add, .slot.free .add:focus-visible { opacity: 1; }
+  .slot.break { background: repeating-linear-gradient(135deg, var(--surface-2) 0 8px, var(--stripe) 8px 16px); color: var(--faint); font-size: 13px; min-height: 44px; }
+  .appt { display: flex; align-items: center; gap: 12px; cursor: pointer; min-width: 0; }
+  .appt .name { font-weight: 550; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .appt:hover .name { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
+  .tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .bar-l { width: 3px; align-self: stretch; border-radius: 3px; }
+  .done-pill { font-size: 11px; font-weight: 600; color: var(--accent-ink); background: var(--accent-soft); padding: 2px 8px; border-radius: 99px; }
+  .slot-actions { display: flex; gap: 2px; opacity: 0; transition: opacity .15s; }
+  .slot:hover .slot-actions, .slot-actions:focus-within { opacity: 1; }
+  .empty-day { padding: 40px 20px; text-align: center; color: var(--muted); }
+
+  .banner { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 18px; margin-bottom: 20px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: var(--radius); color: var(--accent-ink); }
+  .banner > div { flex: 1; min-width: 220px; }
+  .banner .sub { color: var(--accent-ink); opacity: .85; }
+
+  /* Calendar */
+  .cal-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 6px; }
+  .cal-head b { font-weight: 600; }
+  .cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; padding: 6px 12px 14px; text-align: center; }
+  .cal .wd { font-size: 11px; color: var(--faint); font-weight: 600; padding: 6px 0; }
+  .cal button { border: 0; background: none; height: 36px; border-radius: 8px; cursor: pointer; font-variant-numeric: tabular-nums; position: relative; }
+  .cal button:hover { background: var(--bg); }
+  .cal button.out { color: var(--out); }
+  .cal button.off { color: var(--faint); }
+  .cal button.today { color: var(--accent); font-weight: 700; }
+  .cal button.sel { background: var(--btn); color: var(--on-accent); font-weight: 600; }
+  .cal button.has::after { content: ""; position: absolute; bottom: 5px; left: 50%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--accent); }
+  .cal button.sel.has::after { background: var(--on-accent); }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+  .stat { padding: 14px 16px; }
+  .stat .n { font-size: 22px; font-weight: 650; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .stat .l { font-size: 12px; color: var(--muted); }
+  .legend { padding: 14px 16px; display: grid; gap: 8px; margin-top: 12px; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-size: 12px; font-weight: 500; color: var(--muted); padding: 10px 20px; border-bottom: 1px solid var(--border); background: var(--surface-2); }
+  td { padding: 14px 20px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: 0; }
+  tbody tr { cursor: pointer; }
+  tbody tr:hover { background: var(--surface-2); }
+  .search { position: relative; width: 300px; max-width: 100%; }
+  .search svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--faint); width: 16px; height: 16px; }
+  .search .input { padding-left: 34px; }
+  .pname { display: flex; align-items: center; gap: 12px; font-weight: 550; }
+
+  /* Drawer & modal */
+  .scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 40; opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .scrim.open { opacity: 1; pointer-events: auto; }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(760px, 100%); background: var(--surface); z-index: 50; box-shadow: var(--shadow-lg); transform: translateX(100%); transition: transform .25s ease; display: flex; flex-direction: column; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .drawer.open { transform: none; }
+  .d-head { padding: 22px 28px 0; border-bottom: 1px solid var(--border); }
+  .d-top { display: flex; align-items: flex-start; gap: 14px; }
+  .d-top .avatar { width: 44px; height: 44px; font-size: 15px; }
+  .d-meta { display: flex; gap: 18px; flex-wrap: wrap; color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .alerta { margin-top: 6px; color: var(--danger); font-size: 13px; }
+  .tabs { display: flex; gap: 22px; margin-top: 18px; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs button { border: 0; background: none; padding: 10px 0 12px; cursor: pointer; color: var(--muted); font-weight: 500; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+  .tabs button.active { color: var(--text); border-color: var(--accent); }
+  .count { font-size: 11px; background: var(--bg); border: 1px solid var(--border); border-radius: 99px; padding: 0 7px; margin-left: 4px; font-variant-numeric: tabular-nums; }
+  .d-body { flex: 1; overflow: auto; padding: 24px 28px; }
+  .d-foot { padding: 14px 28px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; background: var(--surface-2); }
+  .d-foot:empty { display: none; }
+  .field-block { margin-bottom: 18px; }
+  .field-block label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 6px; }
+
+  .timeline { display: grid; gap: 14px; }
+  .rec { border: 1px solid var(--border); border-radius: var(--radius); }
+  .rec-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--surface-2); border-radius: var(--radius) var(--radius) 0 0; }
+  .rec-head .d { font-weight: 600; }
+  .rec-head .m { color: var(--muted); font-size: 12px; }
+  .rec-body { padding: 14px 16px; display: grid; gap: 10px; }
+  .lbl { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .txt { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .acts { display: flex; gap: 2px; flex: none; }
+
+  /* Prescrição */
+  .rx { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .rx-l { display: flex; gap: 8px; align-items: baseline; }
+  .rx-l .i { color: var(--faint); font-variant-numeric: tabular-nums; width: 16px; flex: none; }
+  .rx-l b { font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+  .rx-q { margin-left: auto; color: var(--muted); font-size: 13px; white-space: nowrap; padding-left: 12px; }
+  .rx-p { color: var(--muted); font-size: 13px; margin-top: 2px; padding-left: 24px; white-space: pre-wrap; }
+  .rx-item { border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 12px; }
+  .rx-item-head { display: flex; align-items: center; justify-content: space-between; margin: -4px -6px -4px 0; }
+  .rx-g { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; }
+  .rx-form { display: grid; gap: 14px; }
+
+  /* Fotos */
+  .drop { border: 1.5px dashed var(--border-strong); border-radius: var(--radius); padding: 22px; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; cursor: pointer; color: var(--muted); transition: background .15s, border-color .15s; }
+  .drop svg { width: 24px; height: 24px; color: var(--accent); margin-bottom: 4px; }
+  .drop b { color: var(--text); font-weight: 600; }
+  .drop:hover, .drop.over, .drop:focus-within { border-color: var(--accent); background: var(--accent-soft); }
+  .nota { padding: 12px 14px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); color: var(--muted); font-size: 13px; }
+  .fotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; margin-top: 18px; }
+  .foto { margin: 0; display: grid; gap: 6px; align-content: start; min-width: 0; }
+  .foto-img { padding: 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; aspect-ratio: 1; max-width: 100%; width: 100%; background: var(--stripe); cursor: zoom-in; display: block; }
+  .foto-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .foto.pend .foto-img { display: grid; place-items: center; color: var(--muted); font-size: 13px; cursor: default; }
+  .foto .input { padding: 6px 9px; font-size: 13px; }
+  .foto .sub { font-size: 12px; margin: 0 2px; }
+
+  .modal { position: fixed; left: 50%; top: 50%; width: min(520px, calc(100% - 32px)); max-height: calc(100% - 48px); overflow: auto; transform: translate(-50%, -48%) scale(.98); opacity: 0; pointer-events: none; transition: .18s; z-index: 60; background: var(--surface); border-radius: 14px; box-shadow: var(--shadow-lg); }
+  .modal.open { opacity: 1; transform: translate(-50%, -50%); pointer-events: auto; }
+  .modal.wide { width: min(980px, calc(100% - 32px)); }
+  .modal-foot { padding: 14px 20px; display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; border-top: 1px solid var(--border); }
+  .scrim.top { z-index: 55; }
+  .lb { position: relative; background: var(--stripe); display: grid; place-items: center; min-height: 240px; }
+  .lb img { max-height: 68vh; max-width: 100%; display: block; }
+  .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); display: grid; place-items: center; cursor: pointer; box-shadow: var(--shadow); }
+  .lb-nav.prev { left: 12px; } .lb-nav.next { right: 12px; }
+
+  .days { display: flex; gap: 6px; flex-wrap: wrap; }
+  .days label { display: inline-flex; }
+  .days input { position: absolute; opacity: 0; pointer-events: none; }
+  .days span { border: 1px solid var(--border-strong); border-radius: 8px; padding: 6px 12px; cursor: pointer; font-weight: 500; color: var(--muted); }
+  .days input:checked + span { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-ink); }
+  .days input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .section-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 14px; }
+
+  .tpl-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .tpl { padding: 18px 20px; cursor: pointer; transition: border-color .15s; }
+  .tpl:hover { border-color: var(--accent); }
+  .tpl ul { margin: 10px 0 0; padding-left: 18px; color: var(--muted); font-size: 13px; }
+
+  .estado { max-width: 460px; margin: 60px auto; text-align: center; padding: 32px 28px; }
+  .estado h1 { font-size: 19px; margin-bottom: 6px; }
+
+  .toast { position: fixed; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%) translateY(20px); background: var(--toast-bg); color: var(--toast-fg); padding: 10px 16px; border-radius: 10px; font-size: 13px; opacity: 0; transition: .2s; z-index: 80; display: flex; gap: 8px; align-items: center; max-width: calc(100% - 32px); pointer-events: none; }
+  .toast.show { opacity: 1; transform: translateX(-50%); }
+
+  /* Financeiro: folha de Controle de Caixa */
+  .folha { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 32px 36px 22px; max-width: 1000px; margin: 0 auto; }
+  .folha-tit { text-align: center; margin-bottom: 24px; }
+  .folha-tit h2 { font-family: var(--display); font-size: 30px; font-weight: 600; letter-spacing: .06em; color: var(--text); margin-bottom: 4px; }
+  .folha-tit div { color: var(--muted); font-size: 13px; }
+  .folha-info { display: flex; justify-content: space-between; gap: 12px 32px; flex-wrap: wrap; margin-bottom: 20px; font-size: 14px; }
+  .folha-info label { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+  .folha-info input, .folha-obs textarea { border: 0; border-bottom: 1px solid var(--border-strong); background: transparent; padding: 4px 2px; outline: none; color: var(--text); font: inherit; }
+  .folha-info input:focus, .folha-obs textarea:focus { border-color: var(--accent); }
+  #cxResp { width: 260px; max-width: 100%; }
+  table.cx { min-width: 760px; border: 1px solid var(--border-strong); }
+  table.cx th { background: var(--ink); color: var(--on-ink); font-size: 12px; font-weight: 600; text-align: center; padding: 11px 8px; border: 0; }
+  table.cx th.n { width: 46px; }
+  table.cx th.w { width: 112px; }
+  table.cx td { padding: 0; border: 1px solid var(--border); height: 36px; }
+  table.cx tbody tr { cursor: default; }
+  table.cx tbody tr:hover { background: none; }
+  table.cx tbody tr:nth-child(odd) td { background: var(--stripe); }
+  table.cx td.n { text-align: center; color: var(--faint); font-size: 12px; font-variant-numeric: tabular-nums; }
+  table.cx input { width: 100%; height: 35px; border: 0; background: transparent; padding: 0 10px; outline: none; font-size: 13.5px; }
+  table.cx input:focus { background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--accent); }
+  table.cx .r { text-align: right; font-variant-numeric: tabular-nums; }
+  table.cx td.tot { padding: 0 10px; font-weight: 600; }
+  .folha-sec { font-family: var(--display); font-size: 19px; font-weight: 600; margin: 24px 0 12px; letter-spacing: .05em; }
+  .fech { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .fech div { background: var(--stripe); border-radius: 10px; padding: 12px 14px; text-align: center; display: grid; gap: 6px; min-width: 0; }
+  .fech span { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .fech b { font-size: 18px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .fech .geral { background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
+  .fech .geral span { color: var(--accent-ink); letter-spacing: .03em; }
+  .folha-obs { display: flex; gap: 8px; align-items: flex-start; margin-top: 18px; color: var(--muted); font-size: 14px; }
+  .folha-obs textarea { flex: 1; resize: vertical; min-height: 44px; line-height: 1.6; }
+  .folha-rod { text-align: center; color: var(--faint); font-size: 12px; margin-top: 22px; }
+  .pill { border: 0; border-radius: 99px; padding: 3px 10px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .pill.pago { background: var(--good-soft); color: var(--good); }
+  .pill.pendente { background: var(--warn-soft); color: var(--warn); }
+  /* Telas de acesso */
+  .login { max-width: 400px; margin: 48px auto; padding: 32px 30px; text-align: center; }
+  .login .grid { text-align: left; }
+  .login h1 { font-size: 26px; margin-bottom: 18px; }
+  .login .btn.primary { justify-content: center; padding: 11px; }
+  .login-logo { width: 84px; height: 84px; object-fit: contain; margin: 0 auto 6px; display: block; }
+  .login-links { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+  .lnk { border: 0; background: none; padding: 0; color: var(--accent-ink); font-weight: 500; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .btn.sair { padding: 6px 10px; font-size: 13px; color: var(--muted); }
+  .savebar[hidden] { display: none !important; }
+  .seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: 10px; padding: 3px; gap: 3px; background: var(--surface-2); flex-wrap: wrap; }
+  .seg button { border: 0; background: none; padding: 7px 14px; border-radius: 7px; cursor: pointer; font-weight: 500; color: var(--muted); }
+  .seg button.on { background: var(--surface); color: var(--text); box-shadow: var(--shadow); font-weight: 600; }
+  .fin-tot { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 18px; font-size: 13px; color: var(--muted); }
+  .fin-tot b { display: block; font-size: 18px; color: var(--text); font-variant-numeric: tabular-nums; }
+
+  @media (max-width: 900px) {
+    .folha { padding: 22px 14px 18px; }
+    .folha-tit h2 { font-size: 24px; }
+    .fech { grid-template-columns: 1fr 1fr; }
+    .agenda { grid-template-columns: 1fr; }
+    .who span { display: none; }
+    nav button span { display: none; }
+    nav button { padding: 11px 13px; }
+    .brand span { display: none; }
+    .bar { gap: 16px; padding: 0 16px; }
+    main { padding: 20px 16px 48px; }
+    .g2, .g3, .rx-g { grid-template-columns: 1fr; }
+    .slot-actions { opacity: 1; }
+    .slot.free .add { opacity: 1; }
+    .hide-sm { display: none; }
+    td, th { padding-left: 14px; padding-right: 14px; }
+    .d-head { padding: 18px 16px 0; }
+    .d-body { padding: 20px 16px; }
+    .d-foot { padding: 12px 16px; }
+    .slot { padding: 12px 14px; gap: 10px; grid-template-columns: 56px 1fr auto; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+
+<header>
+  <div class="bar">
+    <div class="brand"><img class="brand-logo" src="data:image/png;base64,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" alt="Logo ED"></div>
+    <nav id="nav">
+      <button data-view="agenda" title="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg><span>Agenda</span></button>
+      <button data-view="pacientes" title="Pacientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18 14.8c2 .7 3.2 2.5 3.6 5.2"/></svg><span>Pacientes</span></button>
+      <button data-view="financeiro" title="Financeiro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="13" rx="2.5"/><circle cx="12" cy="12.5" r="2.6"/><path d="M6 9.5v.01M18 15.5v.01"/></svg><span>Financeiro</span></button>
+      <button data-view="modelos" title="Modelos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg><span>Modelos</span></button>
+      <button data-view="config" title="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>Configurações</span></button>
+      <button data-view="equipe" title="Equipe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/></svg><span>Equipe</span></button>
+    </nav>
+    <div class="who"><span id="whoName"></span><img class="avatar foto" id="whoAv" src="data:image/jpeg;base64,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" alt="Foto da profissional"><button class="btn ghost sair" id="btnSair" hidden>Sair</button></div>
+  </div>
+</header>
+
+<main id="view"></main>
+
+<div class="savebar"><div class="savebar-in"><span class="sub" id="salvoInfo"></span><button class="btn save" id="btnSalvar"></button></div></div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer"></aside>
+<div class="scrim top" id="scrim2"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const TIPOS = {
+  primeira:     { nome: 'Primeira consulta', cor: '#3b82f6' },
+  retorno:      { nome: 'Retorno',           cor: '#8b5cf6' },
+  urgencia:     { nome: 'Urgência',          cor: '#e0533d' },
+  procedimento: { nome: 'Procedimento',      cor: '#e5a823' },
+  sessao:       { nome: 'Sessão',            cor: '#2f9e7d' },
+};
+const VIAS = ['Uso oral','Uso tópico','Uso sublingual','Uso injetável','Uso oftálmico','Uso otológico','Uso nasal','Uso inalatório','Uso retal','Uso vaginal'];
+// Tipo de atendimento é texto livre; os antigos códigos (primeira, retorno…) continuam com nome e cor
+const tipoInfo = k => TIPOS[k] || { nome: String(k || '').trim() || 'Atendimento', cor: '#b08b45' };
+const WD = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const COLS = ['pacientes','consultas','registros','modelos','prescricoes','fotos','caixa','usuarios'];
+const LEGADO = 'prontuario.v2';
+const I = {
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  left: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>',
+  right: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+  alert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>',
+  pdf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>',
+  money: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5v19M16.5 6.5c-.7-1.3-2.4-2-4.5-2-2.8 0-4.5 1.4-4.5 3.4 0 4.6 9.5 2.4 9.5 7.3 0 2.1-1.9 3.6-5 3.6-2.3 0-4.1-.9-5-2.4"/></svg>',
+  print: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/></svg>',
+  copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>',
+  edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
+  trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>',
+  search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+  image: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>',
+};
+
+// ---------- Utilidades ----------
+const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-3);
+const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parseISO = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const addDays = (s, n) => { const d = parseISO(s); d.setDate(d.getDate()+n); return iso(d); };
+const TODAY = iso(new Date());
+const clone = o => JSON.parse(JSON.stringify(o));
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pac = id => S.pacientes.find(p => p.id === id);
+const initials = n => String(n || '').split(/\s+/).filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase();
+const toMin = t => { const [h,m] = t.split(':').map(Number); return h*60+m; };
+const toHM = m => `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+const fmtDate = (s, opts) => parseISO(s).toLocaleDateString('pt-BR', opts || { day: '2-digit', month: '2-digit', year: 'numeric' });
+const fmtLongo = s => fmtDate(s, { day: '2-digit', month: 'long', year: 'numeric' });
+const idade = n => { if (!n) return ''; const b = parseISO(n), t = new Date(); let a = t.getFullYear()-b.getFullYear(); if (t < new Date(t.getFullYear(), b.getMonth(), b.getDate())) a--; return a + ' anos'; };
+const slug = s => String(s || 'paciente').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'paciente';
+const porData = (a, b) => (b.data + (b.criadoEm || b.hora || '')).localeCompare(a.data + (a.criadoEm || a.hora || ''));
+function toast(msg, tipo) { const t = $('#toast'); t.innerHTML = (tipo === 'erro' ? I.alert : I.check) + '<span></span>'; t.lastChild.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), tipo === 'erro' ? 4200 : 2200); }
+
+// ---------- Estado e banco de dados ----------
+const defaultSettings = () => ({
+  duracao: 30, inicio: '08:00', fim: '18:00', intIni: '12:00', intFim: '13:00', dias: [1,2,3,4,5], valorConsulta: 0,
+  prof: { nome: 'Dra. Elaine Delfino', registro: '', especialidade: '', endereco: '', telefone: '', social: '' },
+});
+const mesclarSettings = d => { const s = Object.assign(defaultSettings(), clone(d || {})); s.prof = Object.assign(defaultSettings().prof, s.prof || {}); return s; };
+const S = { settings: defaultSettings(), pacientes: [], consultas: [], registros: [], modelos: [], prescricoes: [], fotos: [], caixa: [], usuarios: [] };
+let db = null, assets = null, downloads = null, estado = 'carregando';
+
+function falha(e) {
+  console.error(e);
+  toast(e && e.code === 'quota_exceeded' ? 'O banco de dados está cheio. Exclua registros antigos para continuar.' : 'Não foi possível salvar. Verifique a conexão e tente de novo.', 'erro');
+}
+// Acompanha cada gravação para o botão Salvar mostrar o status
+const emAndamento = new Set();
+let ultimoSalvo = null, erroSalvar = false;
+function acompanhar(p) {
+  const t = p.then(() => { ultimoSalvo = new Date(); erroSalvar = false; }, e => { erroSalvar = true; falha(e); })
+    .finally(() => { emAndamento.delete(t); statusSalvar(); });
+  emAndamento.add(t); statusSalvar();
+  return t;
+}
+function statusSalvar() {
+  const b = $('#btnSalvar'); if (!b) return;
+  const salvando = emAndamento.size > 0;
+  b.className = 'btn save' + (salvando ? '' : erroSalvar ? ' err' : ' primary');
+  b.innerHTML = (erroSalvar && !salvando ? I.alert : I.check) + `<span>${salvando ? 'Salvando…' : erroSalvar ? 'Tentar salvar' : 'Salvar'}</span>`;
+  $('#salvoInfo').textContent = salvando ? 'Gravando no banco de dados…'
+    : erroSalvar ? 'Não foi possível salvar a última alteração.'
+    : ultimoSalvo ? `Salvo às ${ultimoSalvo.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`
+    : estado === 'pronto' ? 'Tudo salvo no banco de dados' : '';
+}
+// ---------- Dados guardados neste computador (IndexedDB do navegador) ----------
+// Nada sai do computador: o site no GitHub só entrega as telas.
+const BANCO = 'prontuario-dra-elaine';
+let idb = null;
+let perfil = null;
+const ehAdmin = () => !!perfil && perfil.papel === 'admin';
+function abrirBanco() {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open(BANCO, 1);
+    r.onupgradeneeded = () => { r.result.createObjectStore('docs'); r.result.createObjectStore('fotos'); };
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+}
+function noBanco(loja, modo, fn) {
+  return new Promise((res, rej) => {
+    const t = idb.transaction(loja, modo), req = fn(t.objectStore(loja));
+    t.oncomplete = () => res(req && req.result);
+    t.onerror = t.onabort = () => rej(t.error || new Error('falha no banco do navegador'));
+  });
+}
+const chave = (col, id) => `${col}/${id}`;
+const avisando = r => { avisarAbas(); return r; };
+function gravar(col, obj) { const { id, ...dados } = obj; return acompanhar(noBanco('docs', 'readwrite', s => s.put({ colecao: col, id: String(id), dados: clone(dados) }, chave(col, id))).then(avisando)); }
+function apagar(col, id) { return acompanhar(noBanco('docs', 'readwrite', s => s.delete(chave(col, id))).then(avisando)); }
+function gravarConfig() { return gravar('config', Object.assign({ id: 'geral' }, S.settings)); }
+
+function aplicar(row) {
+  if (!row || !row.colecao) return;
+  if (row.colecao === 'config') { if (row.id === 'geral') S.settings = mesclarSettings(row.dados); return; }
+  const arr = S[row.colecao]; if (!Array.isArray(arr)) return;
+  const obj = Object.assign(clone(row.dados || {}), { id: row.id }), i = arr.findIndex(x => x.id === row.id);
+  if (i >= 0) arr[i] = obj; else arr.push(obj);
+}
+
+async function iniciar() {
+  try {
+    idb = await abrirBanco();
+    try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch {}
+    COLS.forEach(c => { S[c] = []; });
+    (await noBanco('docs', 'readonly', s => s.getAll())).forEach(aplicar);
+    if (!S.modelos.length) {
+      [['clinico', 'Atendimento clínico geral', ['Queixa principal','Sintomas relatados','Exame físico','Medicação prescrita','Exames solicitados','Diagnóstico']],
+       ['retorno', 'Retorno', ['Evolução','Resultado de exames','Conduta']],
+       ['livre', 'Evolução livre', ['Evolução']]].forEach(([id, nome, campos]) => { const m = { id, nome, campos }; S.modelos.push(m); gravar('modelos', m); });
+    }
+  } catch (e) { console.error(e); estado = 'semnavegador'; return render(); }
+  assets = {
+    upload: async blob => { const id = uid() + uid(); await noBanco('fotos', 'readwrite', s => s.put(blob, id)); return { id }; },
+    delete: async id => { await noBanco('fotos', 'readwrite', s => s.delete(id)); if (urlsFoto[id]) URL.revokeObjectURL(urlsFoto[id]); delete urlsFoto[id]; },
+  };
+  downloads = {
+    save: async ({ filename, data }) => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(data instanceof Blob ? data : new Blob([data]));
+      a.download = filename; document.body.appendChild(a); a.click();
+      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+      return { status: 'saved' };
+    },
+  };
+  // Outra aba aberta no mesmo computador também salvou: recarrega os dados
+  try { canalAbas = new BroadcastChannel(BANCO); canalAbas.onmessage = () => recarregar(); } catch {}
+  decidirAcesso();
+}
+let canalAbas = null, tAviso = null;
+async function recarregar() {
+  const linhas = await noBanco('docs', 'readonly', s => s.getAll());
+  COLS.forEach(c => { S[c] = []; }); linhas.forEach(aplicar); aoMudar();
+}
+// Avisa as outras abas um pouco depois da última gravação
+const avisarAbas = () => { clearTimeout(tAviso); tAviso = setTimeout(() => { try { canalAbas && canalAbas.postMessage(1); } catch {} }, 400); };
+
+// Fotos: guardadas como arquivo no navegador e exibidas por um endereço local
+const urlsFoto = {}, pedidas = new Set();
+function fotoSrc(id) {
+  if (id in urlsFoto) return urlsFoto[id];
+  if (!pedidas.has(id)) {
+    pedidas.add(id);
+    noBanco('fotos', 'readonly', s => s.get(id)).then(b => {
+      urlsFoto[id] = b ? URL.createObjectURL(b) : '';
+      if (drawerPac && drawerTab === 'fotos') abrirProntuario(drawerPac, drawerConsulta, 'fotos');
+      if (lightbox && lightbox.lista[lightbox.i].asset === id) verFoto(lightbox.lista[lightbox.i].id);
+    });
+  }
+  return '';
+}
+
+// ---------- Cópia de segurança (arquivo .json com tudo, inclusive fotos) ----------
+const blobParaTexto = b => new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(b); });
+async function exportarCopia() {
+  salvarCaixa(); await Promise.allSettled([...emAndamento]);
+  toast('Preparando a cópia…');
+  const fotos = {};
+  for (const f of S.fotos) { const b = await noBanco('fotos', 'readonly', s => s.get(f.asset)); if (b) fotos[f.asset] = await blobParaTexto(b); }
+  const { pacientes, consultas, registros, modelos, prescricoes, caixa, usuarios, settings } = S;
+  await salvarArquivo(`prontuario-copia-${TODAY}.json`, JSON.stringify({ settings, pacientes, consultas, registros, modelos, prescricoes, fotos: S.fotos, caixa, usuarios, arquivosFotos: fotos }), 'Cópia salva. Guarde o arquivo num pendrive ou no Google Drive.');
+  try { localStorage.setItem('prontuario.ultimaCopia', TODAY); } catch {}
+  configMostrada = false; render();
+}
+const ultimaCopia = () => { try { return localStorage.getItem('prontuario.ultimaCopia'); } catch { return null; } };
+
+// ---------- Login (contas guardadas neste computador, senhas embaralhadas) ----------
+const SESSAO = 'prontuario.sessao', INATIVO_MIN = 30;
+const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+async function hashSenha(senha, saltB64) {
+  const salt = saltB64 ? Uint8Array.from(atob(saltB64), c => c.charCodeAt(0)) : crypto.getRandomValues(new Uint8Array(16));
+  const chaveBase = await crypto.subtle.importKey('raw', new TextEncoder().encode(senha), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', salt, iterations: 150000, hash: 'SHA-256' }, chaveBase, 256);
+  return { salt: b64(salt), hash: b64(bits) };
+}
+async function senhaConfere(u, senha) { return (await hashSenha(senha, u.salt)).hash === u.hash; }
+const acharUsuario = email => S.usuarios.find(u => u.email === String(email || '').trim().toLowerCase());
+
+function decidirAcesso() {
+  if (!S.usuarios.length) { estado = 'primeiro'; return render(); }
+  let id = null; try { id = sessionStorage.getItem(SESSAO); } catch {}
+  const u = S.usuarios.find(x => x.id === id && x.ativo);
+  if (u) return abrirSessao(u);
+  estado = 'login'; render();
+}
+function abrirSessao(u) {
+  perfil = u; try { sessionStorage.setItem(SESSAO, u.id); } catch {}
+  if (!ehAdmin() && !['agenda', 'pacientes', 'financeiro'].includes(view)) view = 'agenda';
+  estado = 'pronto'; marcarAtividade(); render();
+}
+function sair(msg) {
+  salvarCaixa(); perfil = null; fecharDrawer(); closeModal();
+  try { sessionStorage.removeItem(SESSAO); } catch {}
+  estado = 'login'; render(); if (msg) toast(msg);
+}
+// Computador parado por 30 minutos: volta para a tela de login
+let ultimaAtividade = Date.now();
+const marcarAtividade = () => { ultimaAtividade = Date.now(); };
+['pointerdown', 'keydown'].forEach(ev => document.addEventListener(ev, marcarAtividade, { passive: true }));
+setInterval(() => { if (perfil && Date.now() - ultimaAtividade > INATIVO_MIN * 60000) sair('Por segurança, entre de novo.'); }, 60000);
+
+function renderAcesso() {
+  const logo = `<img src="${$('.brand-logo').src}" alt="" class="login-logo">`;
+  $('#view').innerHTML = estado === 'primeiro' ? `<div class="card login">${logo}<h1>Primeiro acesso</h1>
+      <div class="sub" style="margin-bottom:16px">Crie a conta de administrador. Ela cadastra as outras pessoas em Equipe.</div>
+      <form id="fAcesso" class="grid">
+        <div><label class="f" for="acNome">Nome</label><input class="input" id="acNome" autocomplete="name" required></div>
+        <div><label class="f" for="acEmail">E-mail</label><input class="input" id="acEmail" type="email" autocomplete="email" required></div>
+        <div><label class="f" for="acSenha">Senha (mínimo 8 caracteres)</label><input class="input" id="acSenha" type="password" autocomplete="new-password" minlength="8" required></div>
+        <button class="btn primary" type="submit">Criar e entrar</button>
+      </form><div class="sub" style="margin-top:14px">Anote a senha: ela não pode ser recuperada por e-mail.</div></div>`
+    : `<div class="card login">${logo}<h1>Entrar</h1>
+      <form id="fAcesso" class="grid">
+        <div><label class="f" for="acEmail">E-mail</label><input class="input" id="acEmail" type="email" autocomplete="email" required></div>
+        <div><label class="f" for="acSenha">Senha</label><input class="input" id="acSenha" type="password" autocomplete="current-password" required></div>
+        <button class="btn primary" type="submit">Entrar</button>
+      </form>
+      <div class="login-links"><button class="lnk" id="acEsq">Esqueci minha senha</button></div></div>`;
+  if ($('#acEsq')) $('#acEsq').onclick = () => toast('Peça para a administradora criar uma senha nova em Equipe.');
+  const form = $('#fAcesso'), btn = form.querySelector('button[type=submit]');
+  form.onsubmit = async ev => {
+    ev.preventDefault(); btn.disabled = true;
+    try {
+      if (estado === 'primeiro') {
+        const u = Object.assign({ id: uid(), nome: $('#acNome').value.trim(), email: $('#acEmail').value.trim().toLowerCase(), papel: 'admin', ativo: true, criadoEm: new Date().toISOString() }, await hashSenha($('#acSenha').value));
+        S.usuarios.push(u); await gravar('usuarios', u); return abrirSessao(u);
+      }
+      const u = acharUsuario($('#acEmail').value);
+      if (!u || !(await senhaConfere(u, $('#acSenha').value))) { toast('E-mail ou senha incorretos.', 'erro'); btn.disabled = false; return; }
+      if (!u.ativo) { toast('Este acesso está bloqueado. Fale com a administradora.', 'erro'); btn.disabled = false; return; }
+      abrirSessao(u);
+    } catch (e) { console.error(e); toast('Não foi possível entrar. Recarregue a página e tente de novo.', 'erro'); btn.disabled = false; }
+  };
+}
+
+// ---------- Equipe (só administradora) ----------
+function renderEquipe() {
+  const lista = [...S.usuarios].sort((a, b) => (a.criadoEm || '').localeCompare(b.criadoEm || ''));
+  $('#view').innerHTML = `
+    <div class="page-head"><div><h1>Equipe</h1><div class="sub">Quem pode entrar no prontuário</div></div>
+      <button class="btn primary" id="eqNovo">${I.plus}Nova pessoa</button></div>
+    <div class="nota" style="margin-bottom:16px">Funcionárias usam agenda, pacientes e controle de caixa. Prontuário clínico, prescrições, fotos, modelos, configurações e equipe ficam só com administradoras.</div>
+    <div class="card table-wrap"><table>
+      <thead><tr><th>Nome</th><th class="hide-sm">E-mail</th><th>Função</th><th>Acesso</th><th></th></tr></thead>
+      <tbody>${lista.map(u => {
+        const eu = u.id === perfil.id;
+        return `<tr style="cursor:default">
+          <td><div class="pname"><div class="avatar">${initials(u.nome || u.email)}</div>${esc(u.nome || '—')}${eu ? ' <span class="sub">(você)</span>' : ''}</div></td>
+          <td class="hide-sm">${esc(u.email)}</td>
+          <td>${u.papel === 'admin' ? 'Administradora' : 'Funcionária'}</td>
+          <td><span class="pill ${u.ativo ? 'pago' : 'pendente'}">${u.ativo ? 'Liberado' : 'Bloqueado'}</span></td>
+          <td style="text-align:right"><button class="btn" data-editar="${u.id}">${I.edit}Editar</button></td>
+        </tr>`; }).join('')}</tbody></table></div>`;
+  $('#eqNovo').onclick = () => modalUsuario();
+  $('#view').querySelectorAll('[data-editar]').forEach(b => { b.onclick = () => modalUsuario(b.dataset.editar); });
+}
+function modalUsuario(id) {
+  const u = id ? S.usuarios.find(x => x.id === id) : null, eu = u && u.id === perfil.id;
+  openModal(`${modalHead(u ? 'Editar acesso' : 'Nova pessoa')}
+    <div class="card-body grid">
+      <div><label class="f" for="usNome">Nome</label><input class="input" id="usNome" value="${esc(u ? u.nome : '')}"></div>
+      <div><label class="f" for="usEmail">E-mail (usado para entrar)</label><input class="input" id="usEmail" type="email" value="${esc(u ? u.email : '')}"></div>
+      <div><label class="f" for="usSenha">${u ? 'Nova senha (deixe vazio para manter)' : 'Senha (mínimo 8 caracteres)'}</label><input class="input" id="usSenha" type="password" autocomplete="new-password"></div>
+      ${eu ? '' : `<div class="grid g2">
+        <div><label class="f" for="usPapel">Função</label><select class="input" id="usPapel"><option value="funcionaria" ${!u || u.papel === 'funcionaria' ? 'selected' : ''}>Funcionária</option><option value="admin" ${u && u.papel === 'admin' ? 'selected' : ''}>Administradora</option></select></div>
+        <div><label class="f" for="usAtivo">Acesso</label><select class="input" id="usAtivo"><option value="1" ${!u || u.ativo ? 'selected' : ''}>Liberado</option><option value="0" ${u && !u.ativo ? 'selected' : ''}>Bloqueado</option></select></div>
+      </div>`}
+    </div>
+    <div class="modal-foot">
+      ${u && !eu ? `<button class="btn ghost danger" id="usDel" style="margin-right:auto">${I.trash}Excluir</button>` : ''}
+      <button class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary" id="usOk">Salvar</button>
+    </div>`);
+  $('#usOk').onclick = async () => {
+    const nome = $('#usNome').value.trim(), email = $('#usEmail').value.trim().toLowerCase(), senha = $('#usSenha').value;
+    if (!nome) return $('#usNome').focus();
+    if (!/^\S+@\S+\.\S+$/.test(email)) { toast('Informe um e-mail válido', 'erro'); return $('#usEmail').focus(); }
+    const outro = acharUsuario(email); if (outro && outro.id !== id) { toast('Já existe alguém com este e-mail', 'erro'); return; }
+    if ((!u || senha) && senha.length < 8) { toast('A senha precisa ter pelo menos 8 caracteres', 'erro'); return $('#usSenha').focus(); }
+    const novo = u || { id: uid(), criadoEm: new Date().toISOString() };
+    Object.assign(novo, { nome, email });
+    if (!eu) Object.assign(novo, { papel: $('#usPapel').value, ativo: $('#usAtivo').value === '1' });
+    if (senha) Object.assign(novo, await hashSenha(senha));
+    if (!u) S.usuarios.push(novo);
+    gravar('usuarios', novo); closeModal(); render(); toast(u ? 'Acesso atualizado' : 'Pessoa cadastrada');
+  };
+  if (u && !eu) $('#usDel').onclick = () => confirmar(`Excluir o acesso de ${u.nome}?`, () => { S.usuarios = S.usuarios.filter(x => x.id !== u.id); apagar('usuarios', u.id); render(); toast('Acesso excluído'); }, 'Excluir acesso');
+}
+
+// Atualizações vindas do banco (inclusive de outro aparelho)
+let configMostrada = false;
+function aoMudar() {
+  if (estado !== 'pronto') return;
+  const editandoCaixa = view === 'financeiro' && (cxSujo || ($('#folha') && $('#folha').contains(document.activeElement)));
+  if (!(view === 'config' && configMostrada) && !editandoCaixa && view !== 'equipe') render();
+  atualizarGaveta();
+}
+function atualizarGaveta() {
+  if (!drawerPac || estado !== 'pronto') return;
+  if (!pac(drawerPac)) return fecharDrawer();
+  const a = document.activeElement;
+  if (a && $('#drawer').contains(a) && /INPUT|TEXTAREA|SELECT/.test(a.tagName)) return;
+  if (drawerTab === 'hist' || drawerTab === 'fotos' || drawerTab === 'fin' || (drawerTab === 'presc' && !prescForm)) abrirProntuario(drawerPac, drawerConsulta, drawerTab);
+}
+
+// ---------- Navegação ----------
+let view = 'agenda', dia = TODAY, mes = TODAY.slice(0,7), busca = '', legadoOculto = false;
+function go(v) { if (view === 'financeiro') salvarCaixa(); view = v; configMostrada = false; render(); }
+$('#nav').addEventListener('click', e => { const b = e.target.closest('button'); if (b) go(b.dataset.view); });
+$('#btnSair').onclick = () => sair();
+$('#btnSalvar').onclick = async () => {
+  if (estado !== 'pronto') return toast('Os dados ainda estão carregando.', 'erro');
+  if (view === 'config') salvarConfig();
+  salvarCaixa();
+  if (erroSalvar) { erroSalvar = false; gravarConfig(); }
+  await Promise.allSettled([...emAndamento]);
+  statusSalvar();
+  if (!erroSalvar) toast(`Tudo salvo neste computador · ${S.pacientes.length} pacientes, ${S.registros.length} registros, ${S.prescricoes.length} prescrições`);
+};
+
+const SO_ADMIN = ['modelos', 'config', 'equipe'];
+function render() {
+  document.querySelectorAll('#nav button').forEach(b => {
+    b.classList.toggle('active', b.dataset.view === view);
+    b.hidden = estado !== 'pronto' || (!ehAdmin() && SO_ADMIN.includes(b.dataset.view));
+  });
+  $('#whoName').textContent = perfil && !ehAdmin() ? perfil.nome : S.settings.prof.nome;
+  $('#whoAv').hidden = !perfil || !ehAdmin();
+  $('#btnSair').hidden = !perfil;
+  $('.savebar').hidden = estado !== 'pronto';
+  statusSalvar();
+  if (estado === 'login' || estado === 'primeiro') return renderAcesso();
+  if (estado !== 'pronto') return renderEstado();
+  if (view === 'equipe') return renderEquipe();
+  const a = document.activeElement, aid = a && a.id && $('#view').contains(a) ? a.id : null;
+  let sel = null; try { if (aid && typeof a.selectionStart === 'number') sel = [a.selectionStart, a.selectionEnd]; } catch {}
+  ({ agenda: renderAgenda, pacientes: renderPacientes, financeiro: renderFinanceiro, modelos: renderModelos, config: renderConfig })[view]();
+  if (aid) { const n = document.getElementById(aid); if (n) { n.focus(); try { if (sel) n.setSelectionRange(...sel); } catch {} } }
+}
+
+function renderEstado() {
+  const m = {
+    carregando: ['Carregando prontuário…', 'Buscando pacientes, agenda e registros no banco de dados.'],
+    lento: ['Sem conexão com o banco de dados', 'A página continua tentando. Confira a internet; os dados aparecem assim que a conexão voltar.'],
+    semnavegador: ['Navegador sem armazenamento', 'Este navegador não deixa o site guardar dados (janela anônima ou bloqueio). Abra o site numa janela normal do Chrome ou do Edge.'],
+  }[estado];
+  $('#view').innerHTML = `<div class="card estado"><h1>${m[0]}</h1><div class="sub">${m[1]}</div></div>`;
+}
+
+// ---------- Dados antigos (só no navegador) ----------
+function legado() {
+  try {
+    if (localStorage.getItem('prontuario.migrado')) return null;
+    const d = JSON.parse(localStorage.getItem(LEGADO));
+    return d && ((d.pacientes || []).length || (d.registros || []).length || (d.consultas || []).length) ? d : null;
+  } catch { return null; }
+}
+// Restaura uma cópia de segurança (ou os dados trazidos do prontuário do Claude)
+async function importar(d, comConfig) {
+  const itens = ['pacientes','consultas','registros','prescricoes','caixa'].flatMap(c => (Array.isArray(d[c]) ? d[c] : []).filter(x => x && x.id).map(x => [c, x]));
+  const nomes = new Set(S.modelos.map(m => String(m.nome).toLowerCase()));
+  (d.modelos || []).forEach(m => { if (m && m.id && !nomes.has(String(m.nome).toLowerCase())) { nomes.add(String(m.nome).toLowerCase()); itens.push(['modelos', m]); } });
+  // Fotos só entram junto com o arquivo da imagem
+  const arquivos = d.arquivosFotos || {};
+  (d.fotos || []).forEach(f => { if (f && f.id && arquivos[f.asset]) itens.push(['fotos', f]); });
+  // Contas da cópia entram sem substituir quem já existe neste computador
+  (d.usuarios || []).forEach(u => { if (u && u.id && !acharUsuario(u.email)) itens.push(['usuarios', u]); });
+  try {
+    for (const [c, x] of itens) {
+      if (c === 'fotos') { const b = await (await fetch(arquivos[x.asset])).blob(); await noBanco('fotos', 'readwrite', s => s.put(b, x.asset)); }
+      await gravar(c, x);
+      aplicar({ colecao: c, id: String(x.id), dados: (({ id, ...r }) => r)(x) });
+    }
+    if (comConfig && d.settings) { S.settings = mesclarSettings(d.settings); await gravarConfig(); }
+  } catch (e) { falha(e); return false; }
+  toast(`${itens.length} itens restaurados`);
+  return true;
+}
+
+// ---------- Agenda ----------
+function slotsDoDia(data) {
+  const s = S.settings, out = [];
+  const trabalha = s.dias.includes(parseISO(data).getDay());
+  const doDia = S.consultas.filter(c => c.data === data);
+  const horas = new Set(doDia.map(c => c.hora));
+  if (trabalha) for (let m = toMin(s.inicio); m < toMin(s.fim); m += +s.duracao || 30) horas.add(toHM(m));
+  doDia.forEach(c => out.push({ hora: c.hora, c }));
+  horas.forEach(h => { if (!doDia.some(c => c.hora === h)) out.push({ hora: h }); });
+  return { trabalha, itens: out.sort((a,b) => toMin(a.hora) - toMin(b.hora) || (a.pausa ? -1 : 0)) };
+}
+
+function renderAgenda() {
+  const { trabalha, itens } = slotsDoDia(dia);
+  const doDia = S.consultas.filter(c => c.data === dia);
+  const atendidos = doDia.filter(c => c.status === 'atendido').length;
+  const label = fmtDate(dia, { weekday: 'long', day: 'numeric', month: 'long' });
+  const lg = !legadoOculto && legado();
+  $('#view').innerHTML = `
+    ${lg ? `<div class="banner">
+      <div><b>Há dados salvos só neste navegador</b><div class="sub">${(lg.pacientes || []).length} pacientes e ${(lg.registros || []).length} registros da versão anterior. Envie para o banco de dados para não perder.</div></div>
+      <button class="btn" data-a="legadoNao">Agora não</button>
+      <button class="btn primary" data-a="legado">Enviar para o banco</button>
+    </div>` : ''}
+    <div class="page-head">
+      <div><h1>Agenda</h1><div class="sub">${dia === TODAY ? 'Hoje · ' : ''}${esc(label)}</div></div>
+      <div class="daynav">
+        <button class="btn" data-a="hoje">Hoje</button>
+        <button class="icon-btn" data-a="prev" title="Dia anterior">${I.left}</button>
+        <button class="icon-btn" data-a="next" title="Próximo dia">${I.right}</button>
+        <button class="btn primary" data-a="novo">${I.plus}Agendar</button>
+      </div>
+    </div>
+    <div class="agenda">
+      <div class="card">
+        ${!trabalha && !doDia.length ? `<div class="empty-day">Sem atendimento neste dia.<br><span class="sub">Ajuste os dias da semana em Configurações.</span></div>` : ''}
+        ${itens.map(it => {
+          if (it.pausa) return `<div class="slot break"><span>${it.hora}</span><span>Intervalo · ${S.settings.intIni}–${S.settings.intFim}</span><span></span></div>`;
+          if (!it.c) return `<div class="slot free"><span class="time">${it.hora}</span><button class="add" data-a="novo" data-h="${it.hora}">${I.plus}Agendar horário</button><span></span></div>`;
+          const c = it.c, p = pac(c.pacienteId) || { nome: '—' }, t = tipoInfo(c.tipo);
+          return `<div class="slot">
+            <span class="time">${c.hora}</span>
+            <div class="appt" data-a="abrir" data-id="${c.id}">
+              <span class="bar-l" style="background:${t.cor}"></span>
+              <div style="min-width:0">
+                <div class="name">${esc(p.nome)}</div>
+                <span class="tag"><span class="dot" style="background:${t.cor}"></span>${t.nome}${p.convenio ? ' · ' + esc(p.convenio) : ''}</span>
+              </div>
+              ${c.status === 'atendido' ? '<span class="done-pill">Atendido</span>' : ''}
+              ${noCaixa(c.id) ? '<span class="pill pago">No caixa</span>' : ''}
+            </div>
+            <div class="slot-actions">
+              <button class="icon-btn" data-a="pagar" data-id="${c.id}" title="${noCaixa(c.id) ? 'Ver no caixa' : 'Adicionar ao caixa'}">${I.money}</button>
+              <button class="icon-btn" data-a="status" data-id="${c.id}" title="${c.status === 'atendido' ? 'Desmarcar atendido' : 'Marcar como atendido'}">${I.check}</button>
+              <button class="icon-btn" data-a="cancelar" data-id="${c.id}" title="Cancelar agendamento">${I.x}</button>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+      <aside>
+        <div class="card">${calendario()}</div>
+        <div class="stats">
+          <div class="card stat"><div class="n">${doDia.length}</div><div class="l">Agendados</div></div>
+          <div class="card stat"><div class="n">${atendidos}</div><div class="l">Atendidos</div></div>
+        </div>
+      </aside>
+    </div>`;
+}
+
+function calendario() {
+  const [y, m] = mes.split('-').map(Number);
+  const first = new Date(y, m-1, 1);
+  const start = new Date(first); start.setDate(1 - first.getDay());
+  const comConsulta = new Set(S.consultas.map(c => c.data));
+  let cells = '';
+  for (let i = 0; i < 42; i++) {
+    const d = new Date(start); d.setDate(start.getDate() + i);
+    const s = iso(d), cls = [];
+    if (d.getMonth() !== m-1) cls.push('out');
+    else if (!S.settings.dias.includes(d.getDay())) cls.push('off');
+    if (s === TODAY) cls.push('today');
+    if (s === dia) cls.push('sel');
+    if (comConsulta.has(s)) cls.push('has');
+    cells += `<button class="${cls.join(' ')}" data-a="dia" data-d="${s}">${d.getDate()}</button>`;
+  }
+  const nomeMes = first.toLocaleDateString('pt-BR', { month: 'long' });
+  const titulo = nomeMes[0].toUpperCase() + nomeMes.slice(1) + ' ' + y;
+  return `<div class="cal-head">
+      <button class="icon-btn" data-a="mprev" title="Mês anterior">${I.left}</button><b>${titulo}</b><button class="icon-btn" data-a="mnext" title="Próximo mês">${I.right}</button>
+    </div>
+    <div class="cal">${WD.map(w => `<div class="wd">${w[0]}</div>`).join('')}${cells}</div>`;
+}
+
+$('#view').addEventListener('click', e => {
+  const el = e.target.closest('[data-a]'); if (!el) return;
+  const a = el.dataset.a, id = el.dataset.id;
+  const mesDe = s => s.slice(0,7);
+  if (a === 'hoje') { dia = TODAY; mes = mesDe(dia); }
+  else if (a === 'prev') { dia = addDays(dia, -1); mes = mesDe(dia); }
+  else if (a === 'next') { dia = addDays(dia, 1); mes = mesDe(dia); }
+  else if (a === 'dia') { dia = el.dataset.d; mes = mesDe(dia); }
+  else if (a === 'mprev' || a === 'mnext') { const [y,m] = mes.split('-').map(Number); mes = iso(new Date(y, m-1 + (a === 'mnext' ? 1 : -1), 1)).slice(0,7); }
+  else if (a === 'novo') return modalAgendar(el.dataset.h);
+  else if (a === 'abrir') { const c = S.consultas.find(c => c.id === id); return ehAdmin() ? abrirProntuario(c.pacienteId, c.id) : modalPaciente(c.pacienteId); }
+  else if (a === 'status') { const c = S.consultas.find(c => c.id === id); c.status = c.status === 'atendido' ? 'agendado' : 'atendido'; gravar('consultas', c); }
+  else if (a === 'cancelar') return confirmar('Cancelar este agendamento?', () => { S.consultas = S.consultas.filter(c => c.id !== id); apagar('consultas', id); render(); toast('Agendamento cancelado'); }, 'Cancelar agendamento');
+  else if (a === 'legadoNao') { legadoOculto = true; }
+  else if (a === 'legado') { const d = legado(); if (!d) return; el.disabled = true; importar(d, true).then(ok => { if (ok) { try { localStorage.setItem('prontuario.migrado', TODAY); } catch {} } render(); }); return; }
+  else if (a === 'pagar') return pagarConsulta(id);
+  else if (a === 'cxHoje') mudarDiaCaixa(TODAY);
+  else if (a === 'cxPrev' || a === 'cxNext') mudarDiaCaixa(addDays(caixaDia, a === 'cxNext' ? 1 : -1));
+  else if (a === 'cxLinha') { cxExtra += 5; }
+  else if (a === 'cxPdf' || a === 'cxPrint') { salvarCaixa(); return pdfCaixa(a === 'cxPrint'); }
+  else if (a === 'novopac') return modalPaciente();
+  else if (a === 'pac') return ehAdmin() ? abrirProntuario(id) : modalPaciente(id);
+  else if (a === 'modelo') return modalModelo(id);
+  else if (a === 'salvarcfg') return salvarConfig();
+  else return;
+  render();
+});
+
+// ---------- Modal genérico ----------
+function openModal(html, wide) { const m = $('#modal'); m.innerHTML = html; m.classList.toggle('wide', !!wide); m.classList.add('open'); $('#scrim2').classList.add('open'); travar(); setTimeout(() => m.querySelector('input,select,textarea')?.focus(), 50); }
+function closeModal() { $('#modal').classList.remove('open'); $('#scrim2').classList.remove('open'); lightbox = null; travar(); }
+$('#scrim2').onclick = closeModal;
+function confirmar(msg, ok, rotulo) {
+  openModal(`${modalHead('Confirmar')}<div class="card-body">${esc(msg)}</div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal()">Voltar</button><button class="btn primary" id="cfOk">${esc(rotulo || 'Confirmar')}</button></div>`);
+  $('#cfOk').onclick = () => { closeModal(); ok(); };
+}
+const modalHead = (t, sub) => `<div class="card-head"><div style="min-width:0"><h2>${t}</h2>${sub ? `<div class="sub">${sub}</div>` : ''}</div><button class="icon-btn" onclick="closeModal()" title="Fechar">${I.x}</button></div>`;
+
+function modalAgendar(hora) {
+  openModal(`${modalHead('Novo agendamento')}
+    <div class="card-body grid">
+      <div><label class="f" for="agPac">Paciente</label>
+        <input class="input" id="agPac" list="agList" placeholder="Digite o nome; paciente novo é criado na hora">
+        <datalist id="agList">${S.pacientes.map(p => `<option value="${esc(p.nome)}">`).join('')}</datalist></div>
+      <div class="grid g2">
+        <div><label class="f" for="agData">Data</label><input class="input" type="date" id="agData" value="${dia}"></div>
+        <div><label class="f" for="agHora">Horário</label><input class="input" type="time" id="agHora" value="${hora || S.settings.inicio}"></div>
+      </div>
+      <div><label class="f" for="agTipo">Tipo</label><input class="input" id="agTipo" placeholder="Ex.: Limpeza de pele, retorno, avaliação…"></div>
+    </div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary" id="agOk">Agendar</button></div>`);
+  $('#agOk').onclick = () => {
+    const nome = $('#agPac').value.trim(); if (!nome) return $('#agPac').focus();
+    let p = S.pacientes.find(p => p.nome.toLowerCase() === nome.toLowerCase());
+    if (!p) { p = { id: uid(), nome, nasc: '', tel: '', email: '', convenio: '', obs: '' }; S.pacientes.push(p); gravar('pacientes', p); }
+    const c = { id: uid(), pacienteId: p.id, data: $('#agData').value || dia, hora: $('#agHora').value || S.settings.inicio, tipo: $('#agTipo').value.trim(), status: 'agendado' };
+    S.consultas.push(c); gravar('consultas', c);
+    dia = c.data; mes = dia.slice(0,7);
+    closeModal(); render(); toast('Horário agendado');
+  };
+}
+
+// ---------- Pacientes ----------
+function renderPacientes() {
+  const q = busca.toLowerCase();
+  const lista = S.pacientes.filter(p => !q || p.nome.toLowerCase().includes(q) || (p.tel || '').includes(q)).sort((a,b) => a.nome.localeCompare(b.nome));
+  const ultimo = id => { const r = S.registros.filter(r => r.pacienteId === id).sort(porData)[0]; return r ? fmtDate(r.data) : '—'; };
+  $('#view').innerHTML = `
+    <div class="page-head">
+      <div><h1>Pacientes</h1><div class="sub">${S.pacientes.length} cadastrados</div></div>
+      <div class="daynav">
+        <div class="search">${I.search}<input class="input" id="busca" placeholder="Buscar por nome ou telefone" value="${esc(busca)}"></div>
+        <button class="btn primary" data-a="novopac">${I.plus}Novo paciente</button>
+      </div>
+    </div>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr><th>Nome</th><th class="hide-sm">Idade</th><th class="hide-sm">Telefone</th><th class="hide-sm">Convênio</th><th>Último registro</th></tr></thead>
+        <tbody>${lista.map(p => `<tr data-a="pac" data-id="${p.id}">
+          <td><div class="pname"><div class="avatar">${initials(p.nome)}</div>${esc(p.nome)}</div></td>
+          <td class="hide-sm">${idade(p.nasc) || '—'}</td><td class="hide-sm">${esc(p.tel) || '—'}</td><td class="hide-sm">${esc(p.convenio) || '—'}</td><td>${ultimo(p.id)}</td>
+        </tr>`).join('') || `<tr><td colspan="5" class="empty-day">${S.pacientes.length ? 'Nenhum paciente encontrado.' : 'Nenhum paciente ainda. Cadastre em <b>Novo paciente</b> ou agende um horário.'}</td></tr>`}</tbody>
+      </table>
+    </div>`;
+  const b = $('#busca'); b.oninput = () => { busca = b.value; renderPacientes(); const n = $('#busca'); n.focus(); n.setSelectionRange(n.value.length, n.value.length); };
+}
+
+function modalPaciente(id) {
+  const p = id ? pac(id) : { nome: '', nasc: '', tel: '', email: '', convenio: '', obs: '' };
+  openModal(`${modalHead(id ? 'Editar paciente' : 'Novo paciente')}
+    <div class="card-body grid">
+      <div><label class="f" for="pNome">Nome completo</label><input class="input" id="pNome" value="${esc(p.nome)}"></div>
+      <div class="grid g2">
+        <div><label class="f" for="pNasc">Data de nascimento</label><input class="input" type="date" id="pNasc" value="${esc(p.nasc)}"></div>
+        <div><label class="f" for="pTel">Telefone</label><input class="input" id="pTel" value="${esc(p.tel)}" placeholder="(00) 00000-0000"></div>
+      </div>
+      <div class="grid g2">
+        <div><label class="f" for="pEmail">E-mail</label><input class="input" id="pEmail" value="${esc(p.email)}"></div>
+        <div><label class="f" for="pConv">Convênio</label><input class="input" id="pConv" value="${esc(p.convenio)}" placeholder="Particular"></div>
+      </div>
+      <div><label class="f" for="pObs">Observações (alergias, histórico)</label><textarea class="input" id="pObs">${esc(p.obs)}</textarea></div>
+    </div>
+    <div class="modal-foot">
+      ${id && ehAdmin() ? `<button class="btn ghost danger" id="pDel" style="margin-right:auto">${I.trash}Excluir</button>` : ''}
+      <button class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary" id="pOk">Salvar</button>
+    </div>`);
+  $('#pOk').onclick = () => {
+    const nome = $('#pNome').value.trim(); if (!nome) return $('#pNome').focus();
+    Object.assign(p, { nome, nasc: $('#pNasc').value, tel: $('#pTel').value.trim(), email: $('#pEmail').value.trim(), convenio: $('#pConv').value.trim(), obs: $('#pObs').value.trim() });
+    if (!id) { p.id = uid(); S.pacientes.push(p); }
+    gravar('pacientes', p);
+    closeModal(); render(); if (id && drawerPac === id) abrirProntuario(id, drawerConsulta, drawerTab); toast('Paciente salvo');
+  };
+  if (id && ehAdmin()) $('#pDel').onclick = () => confirmar(`Excluir ${p.nome} e todo o prontuário (registros, prescrições e fotos)?`, () => {
+    const ligados = c => S[c].filter(x => x.pacienteId === id);
+    ['consultas','registros','prescricoes','fotos'].forEach(c => ligados(c).forEach(x => apagar(c, x.id)));
+    if (assets) ligados('fotos').forEach(f => assets.delete(f.asset).catch(() => {}));
+    ['consultas','registros','prescricoes','fotos'].forEach(c => { S[c] = S[c].filter(x => x.pacienteId !== id); });
+    S.pacientes = S.pacientes.filter(x => x.id !== id); apagar('pacientes', id);
+    fecharDrawer(); render(); toast('Paciente excluído');
+  }, 'Excluir paciente');
+}
+
+// ---------- Prontuário (gaveta) ----------
+let drawerPac = null, drawerConsulta = null, drawerTab = 'novo', prescForm = null;
+const enviando = {};
+function abrirProntuario(pid, consultaId, tab) {
+  tab = tab || 'novo';
+  const mesmo = drawerPac === pid && drawerTab === tab && $('#drawer').classList.contains('open');
+  const rolagem = mesmo && $('#dBody') ? $('#dBody').scrollTop : 0;
+  drawerPac = pid; drawerConsulta = consultaId || null; drawerTab = tab;
+  const p = pac(pid); if (!p) return fecharDrawer();
+  const n = c => S[c].filter(x => x.pacienteId === pid).length;
+  const meta = [idade(p.nasc), p.tel, p.convenio].filter(Boolean).map(esc);
+  const aba = (t, rotulo, cnt) => `<button data-t="${t}" class="${tab === t ? 'active' : ''}">${rotulo}${cnt != null ? ` <span class="count">${cnt}</span>` : ''}</button>`;
+  $('#drawer').innerHTML = `
+    <div class="d-head">
+      <div class="d-top">
+        <div class="avatar">${initials(p.nome)}</div>
+        <div style="flex:1;min-width:0">
+          <h1 style="font-size:19px">${esc(p.nome)}</h1>
+          <div class="d-meta">${meta.map(m => `<span>${m}</span>`).join('') || '<span>Sem dados complementares</span>'}</div>
+          ${p.obs ? `<div class="alerta">Atenção: ${esc(p.obs)}</div>` : ''}
+        </div>
+        <button class="icon-btn" id="dEdit" title="Editar paciente">${I.edit}</button>
+        <button class="icon-btn" id="dClose" title="Fechar">${I.x}</button>
+      </div>
+      <div class="tabs">
+        ${aba('novo', 'Novo registro')}${aba('hist', 'Histórico', n('registros'))}${aba('presc', 'Prescrições', n('prescricoes'))}${aba('fotos', 'Fotos', n('fotos'))}${aba('fin', 'Financeiro', linhasDoPaciente(pid).length)}
+      </div>
+    </div>
+    <div class="d-body" id="dBody"></div>
+    <div class="d-foot" id="dFoot"></div>`;
+  $('#dClose').onclick = fecharDrawer;
+  $('#dEdit').onclick = () => modalPaciente(pid);
+  $('#drawer .tabs').onclick = e => { const b = e.target.closest('button'); if (b) { if (b.dataset.t === 'presc') prescForm = null; abrirProntuario(pid, drawerConsulta, b.dataset.t); } };
+
+  ({ novo: tabNovo, hist: tabHist, presc: tabPresc, fotos: tabFotos, fin: tabFin })[tab](pid);
+  if (mesmo) $('#dBody').scrollTop = rolagem;
+  $('#drawer').classList.add('open'); $('#scrim').classList.add('open'); travar();
+}
+function fecharDrawer() { $('#drawer').classList.remove('open'); $('#scrim').classList.remove('open'); drawerPac = null; prescForm = null; travar(); }
+function travar() { document.documentElement.classList.toggle('travado', $('#drawer').classList.contains('open') || $('#modal').classList.contains('open')); }
+$('#scrim').onclick = fecharDrawer;
+
+function tabNovo(pid) {
+  $('#dBody').innerHTML = `
+    <div class="grid g2" style="margin-bottom:22px">
+      <div><label class="f" for="rModelo">Modelo</label><select class="input" id="rModelo">${S.modelos.map(m => `<option value="${m.id}">${esc(m.nome)}</option>`).join('') || '<option value="">Evolução livre</option>'}</select></div>
+      <div><label class="f" for="rData">Data do atendimento</label><input class="input" type="date" id="rData" value="${TODAY}"></div>
+    </div>
+    <div id="rCampos"></div>`;
+  const desenhar = () => {
+    const atual = {}; document.querySelectorAll('#rCampos textarea').forEach(t => atual[t.dataset.l] = t.value);
+    const m = S.modelos.find(m => m.id === $('#rModelo').value);
+    $('#rCampos').innerHTML = (m ? m.campos : ['Evolução']).map((c, i) => `<div class="field-block"><label for="rc${i}">${esc(c)}</label><textarea class="input" id="rc${i}" data-l="${esc(c)}">${esc(atual[c] || '')}</textarea></div>`).join('');
+  };
+  $('#rModelo').onchange = desenhar; desenhar();
+  $('#dFoot').innerHTML = `<button class="btn" id="rPrint">${I.print}Salvar e imprimir</button><button class="btn" id="rPdf">${I.pdf}Salvar e baixar PDF</button><button class="btn primary" id="rSave">${I.check}Salvar registro</button>`;
+  const salvar = () => {
+    const campos = [...document.querySelectorAll('#rCampos textarea')].map(t => ({ rotulo: t.dataset.l, texto: t.value.trim() })).filter(c => c.texto);
+    if (!campos.length) { toast('Preencha ao menos um campo', 'erro'); return null; }
+    const m = S.modelos.find(m => m.id === $('#rModelo').value);
+    const now = new Date();
+    const r = { id: uid(), pacienteId: pid, data: $('#rData').value || TODAY, hora: toHM(now.getHours()*60 + now.getMinutes()), modelo: m ? m.nome : 'Evolução livre', campos, criadoEm: now.toISOString() };
+    S.registros.push(r); gravar('registros', r);
+    const c = S.consultas.find(c => c.id === drawerConsulta); if (c && c.status !== 'atendido') { c.status = 'atendido'; gravar('consultas', c); }
+    render(); abrirProntuario(pid, drawerConsulta, 'hist'); toast('Registro salvo no prontuário');
+    return r;
+  };
+  $('#rSave').onclick = salvar;
+  $('#rPdf').onclick = () => { const r = salvar(); if (r) pdfRegistro(r); };
+  $('#rPrint').onclick = () => { const r = salvar(); if (r) pdfRegistro(r, true); };
+}
+
+function tabHist(pid) {
+  const regs = S.registros.filter(r => r.pacienteId === pid).sort(porData);
+  $('#dBody').innerHTML = regs.length ? `<div class="timeline">${regs.map(r => `
+    <div class="rec">
+      <div class="rec-head">
+        <div><div class="d">${fmtLongo(r.data)}</div><div class="m">${esc(r.modelo)}${r.hora ? ' · ' + r.hora : ''}</div></div>
+        <div class="acts">
+          <button class="icon-btn" data-print="${r.id}" title="Imprimir">${I.print}</button>
+          <button class="icon-btn" data-pdf="${r.id}" title="Baixar PDF">${I.pdf}</button>
+          <button class="icon-btn" data-del="${r.id}" title="Excluir registro">${I.trash}</button>
+        </div>
+      </div>
+      <div class="rec-body">${r.campos.map(c => `<div><div class="lbl">${esc(c.rotulo)}</div><div class="txt">${esc(c.texto)}</div></div>`).join('')}</div>
+    </div>`).join('')}</div>` : `<div class="empty-day">Nenhum registro ainda.<br><span class="sub">Os atendimentos salvos aparecem aqui em ordem cronológica.</span></div>`;
+  $('#dBody').onclick = e => {
+    const pr = e.target.closest('[data-pdf]'), im = e.target.closest('[data-print]'), dl = e.target.closest('[data-del]');
+    if (pr) pdfRegistro(S.registros.find(r => r.id === pr.dataset.pdf));
+    if (im) pdfRegistro(S.registros.find(r => r.id === im.dataset.print), true);
+    if (dl) confirmar('Excluir este registro do prontuário?', () => { S.registros = S.registros.filter(r => r.id !== dl.dataset.del); apagar('registros', dl.dataset.del); render(); abrirProntuario(pid, drawerConsulta, 'hist'); }, 'Excluir registro');
+  };
+  $('#dFoot').innerHTML = `<button class="btn primary" id="hNovo">${I.plus}Novo registro</button>`;
+  $('#hNovo').onclick = () => abrirProntuario(pid, drawerConsulta, 'novo');
+}
+
+// ---------- Prescrições ----------
+const itemVazio = () => ({ med: '', qtd: '', via: 'Uso oral', posologia: '' });
+function sugestoes() {
+  const m = new Map();
+  [...S.prescricoes].sort((a, b) => porData(b, a)).forEach(p => (p.itens || []).forEach(i => { if (i.med) m.set(i.med.trim().toLowerCase(), i); }));
+  return m;
+}
+function tabPresc(pid) {
+  if (prescForm) return formPresc(pid);
+  const lista = S.prescricoes.filter(x => x.pacienteId === pid).sort(porData);
+  $('#dBody').innerHTML = lista.length ? `<div class="timeline">${lista.map(rx => `
+    <div class="rec">
+      <div class="rec-head">
+        <div><div class="d">${fmtLongo(rx.data)}</div><div class="m">${rx.itens.length} ${rx.itens.length === 1 ? 'medicamento' : 'medicamentos'}</div></div>
+        <div class="acts">
+          <button class="icon-btn" data-print="${rx.id}" title="Imprimir receita">${I.print}</button>
+          <button class="icon-btn" data-pdf="${rx.id}" title="Baixar receita em PDF">${I.pdf}</button>
+          <button class="icon-btn" data-rep="${rx.id}" title="Repetir prescrição">${I.copy}</button>
+          <button class="icon-btn" data-del="${rx.id}" title="Excluir prescrição">${I.trash}</button>
+        </div>
+      </div>
+      <div class="rec-body">
+        <ol class="rx">${rx.itens.map((i, k) => `<li>
+          <div class="rx-l"><span class="i">${k + 1}.</span><b>${esc(i.med)}</b>${i.qtd ? `<span class="rx-q">${esc(i.qtd)}</span>` : ''}</div>
+          <div class="rx-p">${esc(i.via)}${i.posologia ? ' · ' + esc(i.posologia) : ''}</div>
+        </li>`).join('')}</ol>
+        ${rx.orientacoes ? `<div><div class="lbl">Orientações</div><div class="txt">${esc(rx.orientacoes)}</div></div>` : ''}
+      </div>
+    </div>`).join('')}</div>` : `<div class="empty-day">Nenhuma prescrição ainda.<br><span class="sub">Monte a receita com os medicamentos e baixe em PDF para imprimir ou enviar.</span></div>`;
+  $('#dBody').onclick = e => {
+    const pd = e.target.closest('[data-pdf]'), im = e.target.closest('[data-print]'), rp = e.target.closest('[data-rep]'), dl = e.target.closest('[data-del]');
+    if (pd) pdfReceita(S.prescricoes.find(x => x.id === pd.dataset.pdf));
+    if (im) pdfReceita(S.prescricoes.find(x => x.id === im.dataset.print), true);
+    if (rp) { const o = S.prescricoes.find(x => x.id === rp.dataset.rep); prescForm = { data: TODAY, itens: clone(o.itens), orientacoes: o.orientacoes || '' }; abrirProntuario(pid, drawerConsulta, 'presc'); }
+    if (dl) confirmar('Excluir esta prescrição?', () => { S.prescricoes = S.prescricoes.filter(x => x.id !== dl.dataset.del); apagar('prescricoes', dl.dataset.del); abrirProntuario(pid, drawerConsulta, 'presc'); }, 'Excluir prescrição');
+  };
+  $('#dFoot').innerHTML = `<button class="btn primary" id="pxNova">${I.plus}Nova prescrição</button>`;
+  $('#pxNova').onclick = () => { prescForm = { data: TODAY, itens: [itemVazio()], orientacoes: '' }; abrirProntuario(pid, drawerConsulta, 'presc'); setTimeout(() => $('#pxMed0')?.focus(), 30); };
+}
+
+function formPresc(pid) {
+  const f = prescForm, sug = sugestoes();
+  $('#dBody').innerHTML = `
+    <div class="rx-form">
+      <div class="grid g2"><div><label class="f" for="pxData">Data da prescrição</label><input class="input" type="date" id="pxData" value="${esc(f.data)}"></div></div>
+      ${f.itens.map((it, i) => `<div class="rx-item" data-i="${i}">
+        <div class="rx-item-head"><span class="lbl">Medicamento ${i + 1}</span><button class="icon-btn" data-rm="${i}" title="Remover medicamento" ${f.itens.length < 2 ? 'disabled' : ''}>${I.trash}</button></div>
+        <div class="rx-g">
+          <div><label class="f" for="pxMed${i}">Nome e concentração</label><input class="input" id="pxMed${i}" data-k="med" list="medList" value="${esc(it.med)}" placeholder="Amoxicilina 500 mg"></div>
+          <div><label class="f" for="pxQtd${i}">Quantidade</label><input class="input" id="pxQtd${i}" data-k="qtd" value="${esc(it.qtd)}" placeholder="21 cápsulas"></div>
+          <div><label class="f" for="pxVia${i}">Via</label><select class="input" id="pxVia${i}" data-k="via">${VIAS.map(v => `<option ${v === it.via ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
+        </div>
+        <div><label class="f" for="pxPos${i}">Posologia</label><textarea class="input" id="pxPos${i}" data-k="posologia" rows="2" style="min-height:0" placeholder="Tomar 1 cápsula de 8 em 8 horas por 7 dias">${esc(it.posologia)}</textarea></div>
+      </div>`).join('')}
+      <div><button class="btn" id="pxAdd">${I.plus}Adicionar medicamento</button></div>
+      <div><label class="f" for="pxOri">Orientações ao paciente</label><textarea class="input" id="pxOri" placeholder="Retornar em 15 dias. Suspender se houver alergia.">${esc(f.orientacoes)}</textarea></div>
+    </div>
+    <datalist id="medList">${[...sug.values()].map(i => `<option value="${esc(i.med)}">`).join('')}</datalist>`;
+  const ler = () => {
+    f.data = $('#pxData').value;
+    document.querySelectorAll('.rx-item').forEach(el => { const it = f.itens[+el.dataset.i]; el.querySelectorAll('[data-k]').forEach(x => it[x.dataset.k] = x.value); });
+    f.orientacoes = $('#pxOri').value;
+  };
+  $('#dBody').onclick = e => {
+    const rm = e.target.closest('[data-rm]');
+    if (rm) { ler(); f.itens.splice(+rm.dataset.rm, 1); formPresc(pid); }
+    if (e.target.closest('#pxAdd')) { ler(); f.itens.push(itemVazio()); formPresc(pid); $(`#pxMed${f.itens.length - 1}`)?.focus(); }
+  };
+  // Medicamento já prescrito antes: completa quantidade, via e posologia
+  $('#dBody').onchange = e => {
+    if (e.target.dataset.k !== 'med') return;
+    const s = sug.get(e.target.value.trim().toLowerCase()); if (!s) return;
+    const box = e.target.closest('.rx-item');
+    const set = (k, v) => { const x = box.querySelector(`[data-k="${k}"]`); if (x && !x.value && v) x.value = v; };
+    set('qtd', s.qtd); set('posologia', s.posologia);
+    if (s.via) box.querySelector('[data-k="via"]').value = s.via;
+  };
+  $('#dFoot').innerHTML = `<button class="btn ghost" id="pxCancel" style="margin-right:auto">Cancelar</button><button class="btn" id="pxPrint">${I.print}Salvar e imprimir</button><button class="btn" id="pxPdf">${I.pdf}Salvar e baixar PDF</button><button class="btn primary" id="pxSave">${I.check}Salvar prescrição</button>`;
+  $('#pxCancel').onclick = () => { prescForm = null; abrirProntuario(pid, drawerConsulta, 'presc'); };
+  const salvar = () => {
+    ler();
+    const itens = f.itens.map(i => ({ med: i.med.trim(), qtd: i.qtd.trim(), via: i.via, posologia: i.posologia.trim() })).filter(i => i.med);
+    if (!itens.length) { toast('Informe ao menos um medicamento', 'erro'); $('#pxMed0')?.focus(); return null; }
+    const rx = { id: uid(), pacienteId: pid, data: f.data || TODAY, itens, orientacoes: f.orientacoes.trim(), criadoEm: new Date().toISOString() };
+    S.prescricoes.push(rx); gravar('prescricoes', rx);
+    prescForm = null; abrirProntuario(pid, drawerConsulta, 'presc'); toast('Prescrição salva');
+    return rx;
+  };
+  $('#pxSave').onclick = salvar;
+  $('#pxPdf').onclick = () => { const rx = salvar(); if (rx) pdfReceita(rx); };
+  $('#pxPrint').onclick = () => { const rx = salvar(); if (rx) pdfReceita(rx, true); };
+}
+
+// ---------- Fotos ----------
+let lightbox = null;
+function tabFotos(pid) {
+  const lista = S.fotos.filter(f => f.pacienteId === pid).sort(porData);
+  const pend = enviando[pid] || 0;
+  $('#dBody').innerHTML = `
+    ${assets ? `<label class="drop" id="fDrop">${I.image}<b>Adicionar fotos</b><span class="sub">Arraste imagens aqui ou clique para escolher. JPG, PNG ou WebP.</span><input type="file" id="fInput" accept="image/*" multiple hidden></label>`
+      : `<div class="nota">Só a proprietária e quem tem acesso de edição podem adicionar fotos.</div>`}
+    ${lista.length || pend ? `<div class="fotos">
+      ${Array.from({ length: pend }, () => `<figure class="foto pend"><div class="foto-img">Enviando…</div></figure>`).join('')}
+      ${lista.map(f => `<figure class="foto">
+        <button class="foto-img" data-ver="${f.id}" title="Ampliar"><img src="${esc(fotoSrc(f.asset))}" loading="lazy" alt="${esc(f.legenda || 'Foto de ' + fmtDate(f.data))}"></button>
+        <input class="input" id="leg-${f.id}" data-leg="${f.id}" value="${esc(f.legenda)}" placeholder="Adicionar legenda" aria-label="Legenda">
+        <span class="sub">${fmtDate(f.data)}</span>
+      </figure>`).join('')}
+    </div>` : `<div class="empty-day">Nenhuma foto ainda.<br><span class="sub">Fotos de lesões, exames e evolução do tratamento ficam guardadas aqui.</span></div>`}`;
+  $('#dFoot').innerHTML = '';
+  const inp = $('#fInput'), drop = $('#fDrop');
+  if (inp) {
+    inp.onchange = () => { enviarFotos(pid, [...inp.files]); inp.value = ''; };
+    drop.ondragover = e => { e.preventDefault(); drop.classList.add('over'); };
+    drop.ondragleave = () => drop.classList.remove('over');
+    drop.ondrop = e => { e.preventDefault(); drop.classList.remove('over'); enviarFotos(pid, [...e.dataTransfer.files]); };
+  }
+  $('#dBody').onclick = e => { const v = e.target.closest('[data-ver]'); if (v) verFoto(v.dataset.ver); };
+  $('#dBody').onchange = e => {
+    const id = e.target.dataset.leg; if (!id) return;
+    const f = S.fotos.find(x => x.id === id); if (!f || f.legenda === e.target.value.trim()) return;
+    f.legenda = e.target.value.trim(); gravar('fotos', f); toast('Legenda salva');
+  };
+}
+
+async function preparar(file) {
+  const direto = /^image\/(jpeg|png|webp|gif)$/.test(file.type);
+  let bmp;
+  try { bmp = await createImageBitmap(file); }
+  catch { if (direto) return { blob: file, w: 0, h: 0 }; throw { code: 'unsupported_type' }; }
+  const k = Math.min(1, 2400 / Math.max(bmp.width, bmp.height));
+  if (direto && k === 1 && file.size <= 3 * 1024 * 1024) return { blob: file, w: bmp.width, h: bmp.height };
+  const c = document.createElement('canvas');
+  c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+  const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); ctx.drawImage(bmp, 0, 0, c.width, c.height);
+  const blob = await new Promise((ok, no) => c.toBlob(b => b ? ok(b) : no({ code: 'invalid_request' }), 'image/jpeg', 0.88));
+  return { blob, w: c.width, h: c.height };
+}
+const msgUpload = e => ({
+  too_large: 'A imagem passa de 20 MB.',
+  unsupported_type: 'Formato não suportado. Envie JPG, PNG ou WebP.',
+  quota_or_state: 'O espaço para fotos deste prontuário acabou.',
+  rate_limited: 'Muitos envios seguidos. Aguarde um pouco e tente de novo.',
+})[e && e.code] || 'Não foi possível enviar a foto. Tente de novo.';
+
+async function enviarFotos(pid, files) {
+  if (!assets) return;
+  const refrescar = () => { if (drawerPac === pid && drawerTab === 'fotos') abrirProntuario(pid, drawerConsulta, 'fotos'); };
+  let ok = 0;
+  for (const file of files) {
+    if (!file.type.startsWith('image/')) { toast(`${file.name} não é uma imagem`, 'erro'); continue; }
+    enviando[pid] = (enviando[pid] || 0) + 1; refrescar();
+    try {
+      const { blob, w, h } = await preparar(file);
+      const r = await assets.upload(blob, { type: blob.type || 'image/jpeg' });
+      const f = { id: uid(), pacienteId: pid, asset: r.id, legenda: '', data: TODAY, criadoEm: new Date().toISOString(), w, h };
+      S.fotos.push(f); gravar('fotos', f); ok++;
+    } catch (e) { console.error(e); toast(msgUpload(e), 'erro'); }
+    enviando[pid]--; refrescar();
+  }
+  if (ok) toast(ok === 1 ? 'Foto adicionada' : `${ok} fotos adicionadas`);
+}
+
+function verFoto(id) {
+  const f0 = S.fotos.find(x => x.id === id); if (!f0) return;
+  const lista = S.fotos.filter(x => x.pacienteId === f0.pacienteId).sort(porData);
+  const i = lista.findIndex(x => x.id === id), f = lista[i];
+  lightbox = { lista, i };
+  openModal(`${modalHead(esc(f.legenda || 'Foto'), `${fmtLongo(f.data)} · ${i + 1} de ${lista.length}`)}
+    <div class="lb"><img src="${esc(fotoSrc(f.asset))}" alt="${esc(f.legenda || 'Foto')}">
+      ${lista.length > 1 ? `<button class="lb-nav prev" id="lbPrev" title="Anterior">${I.left}</button><button class="lb-nav next" id="lbNext" title="Próxima">${I.right}</button>` : ''}
+    </div>
+    <div class="modal-foot">
+      ${assets ? `<button class="btn ghost danger" id="lbDel" style="margin-right:auto">${I.trash}Excluir foto</button>` : ''}
+      <button class="btn" onclick="closeModal()">Fechar</button>
+    </div>`, true);
+  if (lista.length > 1) { $('#lbPrev').onclick = () => passo(-1); $('#lbNext').onclick = () => passo(1); }
+  if (assets) $('#lbDel').onclick = () => confirmar('Excluir esta foto do prontuário? Ela não poderá ser recuperada.', () => {
+    S.fotos = S.fotos.filter(x => x.id !== f.id); apagar('fotos', f.id);
+    assets.delete(f.asset).catch(e => console.error(e));
+    abrirProntuario(f.pacienteId, drawerConsulta, 'fotos'); toast('Foto excluída');
+  }, 'Excluir foto');
+}
+function passo(d) { if (!lightbox) return; const { lista, i } = lightbox; verFoto(lista[(i + d + lista.length) % lista.length].id); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { if ($('#modal').classList.contains('open')) closeModal(); else fecharDrawer(); }
+  if (lightbox && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) passo(e.key === 'ArrowLeft' ? -1 : 1);
+});
+
+// ---------- PDF ----------
+async function salvarArquivo(nome, data, aviso) {
+  if (!downloads) return toast('Download indisponível aqui. Abra o prontuário pelo claude.ai.', 'erro');
+  try { await downloads.save({ filename: nome, data }); toast(aviso || 'Arquivo salvo'); }
+  catch (e) { if (e && e.code === 'declined') return; toast(e && e.code === 'rate_limited' ? 'Já há um download aguardando confirmação.' : 'Não foi possível salvar o arquivo.', 'erro'); }
+}
+function pdfBase(titulo) {
+  if (!window.jspdf) { toast('O gerador de PDF não carregou. Recarregue a página.', 'erro'); return null; }
+  const doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' });
+  const pf = S.settings.prof, W = 210, M = 20, ctx = { doc, W, M, y: 22 };
+  doc.setTextColor(25, 30, 40);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(14);
+  doc.text(pf.nome || 'Profissional', W / 2, ctx.y, { align: 'center' }); ctx.y += 5.5;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5);
+  [[pf.especialidade, pf.registro].filter(Boolean).join(' · '), pf.endereco, [pf.telefone, pf.social].filter(Boolean).join(' · ')]
+    .filter(Boolean).forEach(l => { doc.text(l, W / 2, ctx.y, { align: 'center' }); ctx.y += 4.5; });
+  ctx.y += 2; doc.setDrawColor(40); doc.setLineWidth(0.4); doc.line(M, ctx.y, W - M, ctx.y); ctx.y += 10;
+  if (titulo) { doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.text(titulo, W / 2, ctx.y, { align: 'center' }); ctx.y += 10; }
+  return ctx;
+}
+function pdfTexto(ctx, txt, o = {}) {
+  const { doc, M, W } = ctx, size = o.size || 11, x = o.x || M;
+  doc.setFont('helvetica', o.bold ? 'bold' : 'normal'); doc.setFontSize(size);
+  doc.splitTextToSize(String(txt), W - M - x).forEach(l => { if (ctx.y > 272) { doc.addPage(); ctx.y = 22; } doc.text(l, x, ctx.y); ctx.y += size * 0.42; });
+  ctx.y += o.gap ?? 1.5;
+}
+function pdfPaciente(ctx, p) { pdfTexto(ctx, `Paciente: ${p.nome}${p.nasc ? ' · ' + idade(p.nasc) : ''}`, { size: 11, gap: 7 }); }
+function pdfAssinatura(ctx, data) {
+  const { doc, W } = ctx, pf = S.settings.prof;
+  let y = Math.max(ctx.y + 30, 240); if (y > 268) { doc.addPage(); y = 240; }
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
+  doc.text(fmtLongo(data), W / 2, y - 16, { align: 'center' });
+  doc.setLineWidth(0.3); doc.line(W / 2 - 40, y, W / 2 + 40, y);
+  doc.text(pf.nome || '', W / 2, y + 5, { align: 'center' });
+  if (pf.registro) doc.text(pf.registro, W / 2, y + 9.5, { align: 'center' });
+}
+// Impressão: o PDF abre numa aba nova já com a janela de impressão; se o navegador
+// bloquear a aba, o arquivo é baixado e a impressão abre quando ele for aberto.
+const AVISO_IMPRIMIR = 'Abra o arquivo baixado: a janela de impressão abre sozinha.';
+function concluirPdf(ctx, nome, imprimir) {
+  if (imprimir) {
+    ctx.doc.autoPrint({ variant: 'non-conform' });
+    const url = URL.createObjectURL(ctx.doc.output('blob'));
+    if (window.open(url, '_blank')) { setTimeout(() => URL.revokeObjectURL(url), 60000); return; }
+    URL.revokeObjectURL(url);
+  }
+  salvarArquivo((imprimir ? 'imprimir-' : '') + nome, ctx.doc.output('blob'), imprimir ? AVISO_IMPRIMIR : '');
+}
+function pdfRegistro(r, imprimir) {
+  if (!r) return;
+  const ctx = pdfBase((r.modelo || 'Registro de atendimento').toUpperCase()); if (!ctx) return;
+  const p = pac(r.pacienteId) || { nome: '—' };
+  pdfPaciente(ctx, p);
+  r.campos.forEach(c => { pdfTexto(ctx, c.rotulo.toUpperCase(), { size: 9.5, bold: true, gap: 1.2 }); pdfTexto(ctx, c.texto, { size: 11, gap: 5 }); });
+  pdfAssinatura(ctx, r.data);
+  concluirPdf(ctx, `prontuario-${slug(p.nome)}-${r.data}.pdf`, imprimir);
+}
+function pdfReceita(rx, imprimir) {
+  if (!rx) return;
+  const ctx = pdfBase('RECEITUÁRIO'); if (!ctx) return;
+  const { doc, M, W } = ctx, p = pac(rx.pacienteId) || { nome: '—' };
+  pdfPaciente(ctx, p);
+  const grupos = {}; rx.itens.forEach(i => (grupos[i.via || 'Uso oral'] = grupos[i.via || 'Uso oral'] || []).push(i));
+  let n = 0;
+  Object.entries(grupos).forEach(([via, itens]) => {
+    pdfTexto(ctx, via, { size: 11, bold: true, gap: 3 });
+    itens.forEach(i => {
+      n++;
+      if (ctx.y > 262) { doc.addPage(); ctx.y = 22; }
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
+      const qtd = i.qtd || '', qw = qtd ? doc.getTextWidth(qtd) : 0;
+      doc.splitTextToSize(`${n}. ${i.med}`, W - 2 * M - qw - 10).forEach((l, k) => {
+        doc.setFont('helvetica', 'bold'); doc.text(l, M, ctx.y);
+        if (k === 0 && qtd) {
+          const lw = doc.getTextWidth(l);
+          doc.setLineDashPattern([0.4, 1.2], 0); doc.setLineWidth(0.25); doc.line(M + lw + 2, ctx.y, W - M - qw - 2, ctx.y); doc.setLineDashPattern([], 0);
+          doc.setFont('helvetica', 'normal'); doc.text(qtd, W - M, ctx.y, { align: 'right' });
+        }
+        ctx.y += 4.8;
+      });
+      if (i.posologia) pdfTexto(ctx, i.posologia, { size: 10.5, x: M + 5, gap: 4.5 }); else ctx.y += 3;
+    });
+    ctx.y += 2;
+  });
+  if (rx.orientacoes) { ctx.y += 2; pdfTexto(ctx, 'Orientações', { size: 10.5, bold: true, gap: 1 }); pdfTexto(ctx, rx.orientacoes, { size: 10.5 }); }
+  pdfAssinatura(ctx, rx.data);
+  concluirPdf(ctx, `receita-${slug(p.nome)}-${rx.data}.pdf`, imprimir);
+}
+
+// ---------- Financeiro: controle de caixa diário ----------
+// Um documento por dia (id = data), com as linhas de recebimento separadas por forma de pagamento.
+let caixaDia = TODAY, cx = null, cxSujo = false, cxTimer = null, cxExtra = 0;
+const MIN_LINHAS = 21, PAGTOS = [['pix','Pix'],['cartao','Cartão'],['dinheiro','Dinheiro']];
+const fmtBRL = v => (+v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const fmtNum = v => (+v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+function parseValor(s) {
+  s = String(s || '').replace(/[^\d,.-]/g, '');
+  if (s.includes(',')) s = s.replace(/\./g, '').replace(',', '.');
+  const n = parseFloat(s); return isFinite(n) ? Math.round(n * 100) / 100 : 0;
+}
+const linhaVazia = () => ({ cliente: '', procedimento: '', pix: 0, cartao: 0, dinheiro: 0 });
+const totalLinha = l => (+l.pix || 0) + (+l.cartao || 0) + (+l.dinheiro || 0);
+const linhaUsada = l => !!l && !!(String(l.cliente || '').trim() || String(l.procedimento || '').trim() || totalLinha(l) > 0);
+const noCaixa = cid => S.caixa.some(c => (c.linhas || []).some(l => l.consultaId === cid));
+const refrescarFin = () => { if (drawerPac && drawerTab === 'fin') abrirProntuario(drawerPac, drawerConsulta, 'fin'); };
+function caixaDoDia(d) {
+  const x = S.caixa.find(c => c.id === d);
+  const c = x ? clone(x) : { id: d, responsavel: '', linhas: [], observacoes: '' };
+  c.id = d; c.responsavel = c.responsavel || ''; c.observacoes = c.observacoes || '';
+  c.linhas = (c.linhas || []).map(l => Object.assign(linhaVazia(), l));
+  return c;
+}
+function totaisCaixa(c) {
+  const t = { pix: 0, cartao: 0, dinheiro: 0 };
+  c.linhas.forEach(l => PAGTOS.forEach(([k]) => { t[k] += +l[k] || 0; }));
+  t.total = t.pix + t.cartao + t.dinheiro;
+  return t;
+}
+function salvarCaixa() {
+  clearTimeout(cxTimer); cxTimer = null;
+  if (!cx || !cxSujo) return;
+  cxSujo = false;
+  const linhas = cx.linhas.slice();
+  while (linhas.length && !linhaUsada(linhas[linhas.length - 1])) linhas.pop();
+  const doc = { id: cx.id, responsavel: cx.responsavel, observacoes: cx.observacoes, linhas };
+  const i = S.caixa.findIndex(c => c.id === cx.id); if (i >= 0) S.caixa[i] = clone(doc); else S.caixa.push(clone(doc));
+  gravar('caixa', doc);
+}
+function sujar() { cxSujo = true; clearTimeout(cxTimer); cxTimer = setTimeout(salvarCaixa, 900); }
+function mudarDiaCaixa(d) { salvarCaixa(); caixaDia = d; cx = null; cxExtra = 0; }
+
+function renderFinanceiro() {
+  if (!cx || cx.id !== caixaDia || !cxSujo) cx = caixaDoDia(caixaDia);
+  let ultima = -1; cx.linhas.forEach((l, i) => { if (linhaUsada(l)) ultima = i; });
+  const n = Math.max(MIN_LINHAS, ultima + 2) + cxExtra;
+  while (cx.linhas.length < n) cx.linhas.push(linhaVazia());
+  const t = totaisCaixa(cx);
+  const procs = [...new Set([...Object.values(TIPOS).map(x => x.nome), ...S.caixa.flatMap(c => (c.linhas || []).map(l => l.procedimento)).filter(Boolean)])];
+  const label = fmtDate(caixaDia, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const v = x => x ? esc(fmtNum(x)) : '';
+  $('#view').innerHTML = `
+    <div class="page-head">
+      <div><h1>Financeiro</h1><div class="sub">${caixaDia === TODAY ? 'Hoje · ' : ''}${esc(label)}</div></div>
+      <div class="daynav">
+        <button class="btn" data-a="cxHoje">Hoje</button>
+        <button class="icon-btn" data-a="cxPrev" title="Dia anterior">${I.left}</button>
+        <button class="icon-btn" data-a="cxNext" title="Próximo dia">${I.right}</button>
+        <button class="btn" data-a="cxPdf">${I.pdf}Baixar PDF</button>
+        <button class="btn primary" data-a="cxPrint">${I.print}Imprimir</button>
+      </div>
+    </div>
+    <div class="folha" id="folha">
+      <div class="folha-tit"><h2>CONTROLE DE CAIXA</h2><div>Consultório de Estética &nbsp;|&nbsp; Registro diário de recebimentos</div></div>
+      <div class="folha-info">
+        <label>Data: <input type="date" id="cxData" value="${caixaDia}"></label>
+        <label>Responsável: <input id="cxResp" value="${esc(cx.responsavel)}" placeholder="Quem fecha o caixa"></label>
+      </div>
+      <div class="table-wrap"><table class="cx">
+        <thead><tr><th class="n">Nº</th><th>Nome da cliente</th><th>Procedimento</th><th class="w">Pix (R$)</th><th class="w">Cartão (R$)</th><th class="w">Dinheiro (R$)</th><th class="w">Total (R$)</th></tr></thead>
+        <tbody>${cx.linhas.map((l, i) => `<tr>
+          <td class="n">${i + 1}</td>
+          <td><input id="cx-${i}-cliente" data-i="${i}" data-k="cliente" list="cxPac" value="${esc(l.cliente)}" aria-label="Nome da cliente, linha ${i + 1}"></td>
+          <td><input id="cx-${i}-procedimento" data-i="${i}" data-k="procedimento" list="cxProc" value="${esc(l.procedimento)}" aria-label="Procedimento, linha ${i + 1}"></td>
+          ${PAGTOS.map(([k, r]) => `<td><input class="r" id="cx-${i}-${k}" data-i="${i}" data-k="${k}" inputmode="decimal" value="${v(l[k])}" aria-label="${r}, linha ${i + 1}"></td>`).join('')}
+          <td class="r tot" id="cx-t${i}">${v(totalLinha(l))}</td>
+        </tr>`).join('')}</tbody>
+      </table></div>
+      <button class="btn ghost" data-a="cxLinha" style="margin-top:8px">${I.plus}Adicionar linhas</button>
+      <h3 class="folha-sec">FECHAMENTO DO CAIXA</h3>
+      <div class="fech">
+        <div><span>Total Pix</span><b id="cxTpix">${fmtBRL(t.pix)}</b></div>
+        <div><span>Total Cartão</span><b id="cxTcartao">${fmtBRL(t.cartao)}</b></div>
+        <div><span>Total Dinheiro</span><b id="cxTdinheiro">${fmtBRL(t.dinheiro)}</b></div>
+        <div class="geral"><span>TOTAL RECEBIDO</span><b id="cxTtotal">${fmtBRL(t.total)}</b></div>
+      </div>
+      <label class="folha-obs">Observações:<textarea id="cxObs" rows="2">${esc(cx.observacoes)}</textarea></label>
+      <div class="folha-rod">Controle interno · Preencher uma linha por cliente e separar por forma de pagamento</div>
+    </div>
+    <datalist id="cxPac">${S.pacientes.map(p => `<option value="${esc(p.nome)}">`).join('')}</datalist>
+    <datalist id="cxProc">${procs.map(p => `<option value="${esc(p)}">`).join('')}</datalist>`;
+  const folha = $('#folha');
+  folha.oninput = e => {
+    const x = e.target;
+    if (x.id === 'cxResp') { cx.responsavel = x.value; return sujar(); }
+    if (x.id === 'cxObs') { cx.observacoes = x.value; return sujar(); }
+    const k = x.dataset.k; if (!k) return;
+    const i = +x.dataset.i, l = cx.linhas[i];
+    if (k === 'cliente' || k === 'procedimento') {
+      l[k] = x.value;
+      if (k === 'cliente') { const p = S.pacientes.find(p => p.nome.toLowerCase() === x.value.trim().toLowerCase()); l.pacienteId = p ? p.id : ''; }
+    } else {
+      l[k] = parseValor(x.value);
+      $(`#cx-t${i}`).textContent = totalLinha(l) ? fmtNum(totalLinha(l)) : '';
+      atualizarFech();
+    }
+    sujar();
+  };
+  folha.onchange = e => {
+    const x = e.target;
+    if (x.id === 'cxData') { if (x.value) { mudarDiaCaixa(x.value); render(); } return; }
+    const k = x.dataset.k;
+    if (PAGTOS.some(([p]) => p === k)) { const val = cx.linhas[+x.dataset.i][k]; x.value = val ? fmtNum(val) : ''; }
+  };
+}
+function atualizarFech() {
+  const t = totaisCaixa(cx);
+  PAGTOS.forEach(([k]) => { $(`#cxT${k}`).textContent = fmtBRL(t[k]); });
+  $('#cxTtotal').textContent = fmtBRL(t.total);
+}
+
+// Atendimento da agenda ou do prontuário vira uma linha no caixa do dia
+function pagarConsulta(cid) {
+  const c = S.consultas.find(x => x.id === cid), p = pac(c.pacienteId) || { nome: '' };
+  if (noCaixa(cid)) { mudarDiaCaixa(c.data); return go('financeiro'); }
+  abrirAddCaixa({ data: c.data, cliente: p.nome, pacienteId: c.pacienteId, procedimento: tipoInfo(c.tipo).nome, consultaId: cid });
+}
+function abrirAddCaixa(pre) {
+  let forma = 'pix';
+  openModal(`${modalHead('Adicionar ao caixa', esc(fmtLongo(pre.data)))}
+    <div class="card-body grid">
+      <div><label class="f" for="acCli">Nome da cliente</label><input class="input" id="acCli" list="acPac" value="${esc(pre.cliente)}"><datalist id="acPac">${S.pacientes.map(p => `<option value="${esc(p.nome)}">`).join('')}</datalist></div>
+      <div><label class="f" for="acProc">Procedimento</label><input class="input" id="acProc" value="${esc(pre.procedimento)}"></div>
+      <div class="grid g2">
+        <div><label class="f" for="acValor">Valor (R$)</label><input class="input" id="acValor" inputmode="decimal" value="${S.settings.valorConsulta ? esc(fmtNum(S.settings.valorConsulta)) : ''}" placeholder="0,00"></div>
+        <div><label class="f">Forma de pagamento</label><div class="seg" id="acForma">${PAGTOS.map(([k, r]) => `<button data-v="${k}" class="${k === forma ? 'on' : ''}">${r}</button>`).join('')}</div></div>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary" id="acOk">Adicionar ao caixa</button></div>`);
+  setTimeout(() => $('#acValor')?.focus(), 60);
+  $('#acForma').onclick = e => { const b = e.target.closest('button'); if (!b) return; forma = b.dataset.v; $('#acForma').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); };
+  $('#acOk').onclick = () => {
+    const valor = parseValor($('#acValor').value);
+    if (!(valor > 0)) { toast('Informe o valor', 'erro'); return $('#acValor').focus(); }
+    if (cx && cx.id === pre.data) salvarCaixa();
+    const c = caixaDoDia(pre.data);
+    c.linhas = c.linhas.filter(linhaUsada);
+    const nome = $('#acCli').value.trim(), px = S.pacientes.find(p => p.nome.toLowerCase() === nome.toLowerCase());
+    c.linhas.push(Object.assign(linhaVazia(), { cliente: nome, procedimento: $('#acProc').value.trim(), pacienteId: px ? px.id : (pre.pacienteId || ''), consultaId: pre.consultaId || '', [forma]: valor }));
+    const i = S.caixa.findIndex(x => x.id === c.id); if (i >= 0) S.caixa[i] = clone(c); else S.caixa.push(clone(c));
+    if (cx && cx.id === c.id) cx = null;
+    gravar('caixa', c);
+    closeModal(); render(); refrescarFin();
+    toast(`Adicionado ao caixa de ${fmtDate(c.id)}`);
+  };
+}
+
+function linhasDoPaciente(pid) {
+  return S.caixa.flatMap(c => (c.linhas || []).filter(l => l.pacienteId === pid).map(l => Object.assign({ data: c.id }, l)))
+    .sort((a, b) => b.data.localeCompare(a.data));
+}
+function tabFin(pid) {
+  const lista = linhasDoPaciente(pid), total = lista.reduce((s, l) => s + totalLinha(l), 0);
+  const formas = l => PAGTOS.filter(([k]) => +l[k]).map(([, r]) => r).join(' + ') || '—';
+  $('#dBody').innerHTML = lista.length ? `
+    <div class="fin-tot"><div>Total pago<b>${fmtBRL(total)}</b></div><div>Atendimentos no caixa<b>${lista.length}</b></div></div>
+    <div class="timeline">${lista.map(l => `<div class="rec" style="cursor:pointer" data-dia="${l.data}" title="Abrir o caixa deste dia">
+      <div class="rec-head" style="border-bottom:0;border-radius:var(--radius)">
+        <div style="min-width:0"><div class="d">${esc(l.procedimento || 'Atendimento')}</div><div class="m">${fmtLongo(l.data)} · ${formas(l)}</div></div>
+        <b style="font-variant-numeric:tabular-nums;flex:none">${fmtBRL(totalLinha(l))}</b>
+      </div>
+    </div>`).join('')}</div>` : `<div class="empty-day">Nenhum pagamento no caixa.<br><span class="sub">Os valores lançados no Controle de Caixa com o nome deste paciente aparecem aqui.</span></div>`;
+  $('#dBody').onclick = e => { const r = e.target.closest('[data-dia]'); if (r) { fecharDrawer(); mudarDiaCaixa(r.dataset.dia); go('financeiro'); } };
+  $('#dFoot').innerHTML = `<button class="btn primary" id="fNovo">${I.plus}Adicionar ao caixa de hoje</button>`;
+  $('#fNovo').onclick = () => abrirAddCaixa({ data: TODAY, cliente: pac(pid).nome, pacienteId: pid, procedimento: 'Consulta' });
+}
+
+function pdfCaixa(imprimir) {
+  if (!window.jspdf) return toast('O gerador de PDF não carregou. Recarregue a página.', 'erro');
+  const doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' }), W = 210, M = 15;
+  const linhas = cx.linhas.filter(linhaUsada), n = Math.max(MIN_LINHAS, linhas.length), t = totaisCaixa(cx);
+  let y = 20;
+  doc.setTextColor(20); doc.setFont('helvetica', 'bold'); doc.setFontSize(17);
+  doc.text('CONTROLE DE CAIXA', W / 2, y, { align: 'center' }); y += 6;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5);
+  doc.text('Consultório de Estética  |  Registro diário de recebimentos', W / 2, y, { align: 'center' }); y += 12;
+  doc.setFontSize(10);
+  doc.text('Data: ' + fmtDate(caixaDia), M + 2, y);
+  doc.text('Responsável: ' + (cx.responsavel || '____________________________'), 112, y); y += 8;
+  const cols = [[10, 'Nº', 'c'], [40, 'Nome da cliente', 'l'], [36, 'Procedimento', 'l'], [23, 'Pix (R$)', 'r'], [23, 'Cartão (R$)', 'r'], [24, 'Dinheiro (R$)', 'r'], [24, 'Total (R$)', 'r']];
+  const hH = 8, rH = Math.max(5, Math.min(7, 150 / n));
+  const cab = () => {
+    doc.setFillColor(150, 117, 47); doc.rect(M, y, W - 2 * M, hH, 'F');
+    doc.setTextColor(255); doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
+    let x = M; cols.forEach(([w, r]) => { doc.text(r, x + w / 2, y + 5.2, { align: 'center' }); x += w; });
+    y += hH; doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setDrawColor(210); doc.setLineWidth(0.2);
+  };
+  cab();
+  for (let i = 0; i < n; i++) {
+    if (y + rH > 282) { doc.addPage(); y = 15; cab(); }
+    if (i % 2 === 0) { doc.setFillColor(245, 245, 245); doc.rect(M, y, W - 2 * M, rH, 'F'); }
+    const l = linhas[i];
+    const vals = [String(i + 1), l ? l.cliente : '', l ? l.procedimento : '', ...(l ? [l.pix, l.cartao, l.dinheiro, totalLinha(l)].map(v => v ? fmtNum(v) : '') : ['', '', '', ''])];
+    let x = M;
+    cols.forEach(([w, , al], k) => {
+      doc.rect(x, y, w, rH);
+      let s = vals[k];
+      if (s) {
+        if (al === 'l') s = doc.splitTextToSize(String(s), w - 3)[0];
+        doc.setTextColor(k === 0 ? 140 : 30); doc.setFont('helvetica', k === 6 ? 'bold' : 'normal');
+        doc.text(s, al === 'c' ? x + w / 2 : al === 'r' ? x + w - 1.5 : x + 1.5, y + rH / 2 + 1.1, { align: al === 'c' ? 'center' : al === 'r' ? 'right' : 'left' });
+      }
+      x += w;
+    });
+    y += rH;
+  }
+  y += 9; if (y > 245) { doc.addPage(); y = 20; }
+  doc.setTextColor(20); doc.setFont('helvetica', 'bold'); doc.setFontSize(10.5); doc.text('FECHAMENTO DO CAIXA', M, y); y += 5;
+  const bw = (W - 2 * M - 15) / 4;
+  [['Total Pix', t.pix], ['Total Cartão', t.cartao], ['Total Dinheiro', t.dinheiro], ['TOTAL RECEBIDO', t.total]].forEach(([r, v], k) => {
+    const bx = M + k * (bw + 5);
+    doc.setFillColor(236, 236, 236); doc.roundedRect(bx, y, bw, 16, 2, 2, 'F');
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5); doc.setTextColor(40); doc.text(r, bx + bw / 2, y + 5.5, { align: 'center' });
+    doc.setFont('helvetica', k === 3 ? 'bold' : 'normal'); doc.setFontSize(10.5); doc.setTextColor(20); doc.text(fmtBRL(v), bx + bw / 2, y + 12, { align: 'center' });
+  });
+  y += 24;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(30);
+  doc.text('Observações:', M, y);
+  doc.splitTextToSize(cx.observacoes || '', W - 2 * M - 24).slice(0, 2).forEach((s, k) => doc.text(s, M + 23, y - 0.5 + k * 8));
+  doc.setDrawColor(130); doc.line(M + 22, y + 1, W - M, y + 1); doc.line(M, y + 9, W - M, y + 9);
+  doc.setFontSize(7.5); doc.setTextColor(110);
+  doc.text('Controle interno  ·  Preencher uma linha por cliente e separar por forma de pagamento', W / 2, 288, { align: 'center' });
+  concluirPdf({ doc }, `caixa-${caixaDia}.pdf`, imprimir);
+}
+
+// ---------- Modelos ----------
+function renderModelos() {
+  $('#view').innerHTML = `
+    <div class="page-head">
+      <div><h1>Modelos de prontuário</h1><div class="sub">Os campos de cada modelo aparecem ao registrar um atendimento</div></div>
+      <button class="btn primary" data-a="modelo">${I.plus}Novo modelo</button>
+    </div>
+    ${S.modelos.length ? `<div class="tpl-list">${S.modelos.map(m => `
+      <div class="card tpl" data-a="modelo" data-id="${m.id}">
+        <h2>${esc(m.nome)}</h2>
+        <ul>${m.campos.map(c => `<li>${esc(c)}</li>`).join('')}</ul>
+      </div>`).join('')}</div>` : `<div class="card empty-day">Nenhum modelo ainda.<br><span class="sub">Crie um modelo com os campos que você preenche em cada atendimento.</span></div>`}`;
+}
+function modalModelo(id) {
+  const m = id ? S.modelos.find(m => m.id === id) : { nome: '', campos: [] };
+  openModal(`${modalHead(id ? 'Editar modelo' : 'Novo modelo')}
+    <div class="card-body grid">
+      <div><label class="f" for="mNome">Nome do modelo</label><input class="input" id="mNome" value="${esc(m.nome)}" placeholder="Ex.: Avaliação inicial"></div>
+      <div><label class="f" for="mCampos">Campos, um por linha</label><textarea class="input" id="mCampos" rows="7" placeholder="Queixa principal&#10;Conduta">${esc(m.campos.join('\n'))}</textarea></div>
+    </div>
+    <div class="modal-foot">
+      ${id ? `<button class="btn ghost danger" id="mDel" style="margin-right:auto">${I.trash}Excluir</button>` : ''}
+      <button class="btn" onclick="closeModal()">Cancelar</button><button class="btn primary" id="mOk">Salvar</button>
+    </div>`);
+  $('#mOk').onclick = () => {
+    const nome = $('#mNome').value.trim(), campos = $('#mCampos').value.split('\n').map(s => s.trim()).filter(Boolean);
+    if (!nome) return $('#mNome').focus();
+    if (!campos.length) return $('#mCampos').focus();
+    Object.assign(m, { nome, campos }); if (!id) { m.id = uid(); S.modelos.push(m); }
+    gravar('modelos', m); closeModal(); render(); toast('Modelo salvo');
+  };
+  if (id) $('#mDel').onclick = () => { if (S.modelos.length < 2) return toast('Mantenha ao menos um modelo', 'erro'); S.modelos = S.modelos.filter(x => x.id !== id); apagar('modelos', id); closeModal(); render(); };
+}
+
+// ---------- Configurações ----------
+function renderConfig() {
+  configMostrada = true;
+  const s = S.settings, pf = s.prof, lg = legado();
+  $('#view').innerHTML = `
+    <div class="page-head">
+      <div><h1>Configurações</h1><div class="sub">Horários da agenda e dados que saem no cabeçalho dos PDFs</div></div>
+      <button class="btn primary" data-a="salvarcfg">${I.check}Salvar</button>
+    </div>
+    <div class="grid" style="gap:20px">
+      <div class="card"><div class="card-body">
+        <p class="section-title">Agenda</p>
+        <div class="grid g2">
+          <div><label class="f" for="cIni">Atendimento, início</label><input class="input" type="time" id="cIni" value="${s.inicio}"></div>
+          <div><label class="f" for="cFim">Atendimento, fim</label><input class="input" type="time" id="cFim" value="${s.fim}"></div>
+        </div>
+        <div style="margin-top:18px"><label class="f">Dias de atendimento</label>
+          <div class="days" id="cDias">${WD.map((w,i) => `<label><input type="checkbox" id="cDia${i}" value="${i}" ${s.dias.includes(i) ? 'checked' : ''}><span>${w}</span></label>`).join('')}</div>
+        </div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <p class="section-title">Profissional</p>
+        <div class="grid g2">
+          <div><label class="f" for="cNome">Nome</label><input class="input" id="cNome" value="${esc(pf.nome)}"></div>
+          <div><label class="f" for="cReg">Registro (CRM, CRP, CRO…)</label><input class="input" id="cReg" value="${esc(pf.registro)}"></div>
+          <div><label class="f" for="cEsp">Especialidade</label><input class="input" id="cEsp" value="${esc(pf.especialidade)}"></div>
+          <div><label class="f" for="cTel">Telefone</label><input class="input" id="cTel" value="${esc(pf.telefone)}"></div>
+          <div><label class="f" for="cEnd">Endereço</label><input class="input" id="cEnd" value="${esc(pf.endereco)}"></div>
+          <div><label class="f" for="cSoc">Rede social / site</label><input class="input" id="cSoc" value="${esc(pf.social)}"></div>
+        </div>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <p class="section-title">Financeiro</p>
+        <div class="grid g2">
+          <div><label class="f" for="cValor">Valor padrão da consulta (R$)</label><input class="input" id="cValor" inputmode="decimal" value="${s.valorConsulta ? esc(fmtNum(s.valorConsulta)) : ''}" placeholder="0,00"></div>
+        </div>
+        <div class="sub" style="margin-top:8px">Esse valor já vem preenchido ao adicionar uma consulta da agenda ao caixa.</div>
+      </div></div>
+      <div class="card"><div class="card-body" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="flex:1;min-width:240px"><p class="section-title" style="margin-bottom:4px">Cópia de segurança</p>
+          <div class="sub">Os dados ficam guardados só neste computador. Faça uma cópia toda semana e guarde num pendrive ou no Google Drive: se o navegador for limpo ou o computador quebrar, é ela que traz tudo de volta.
+          ${ultimaCopia() ? `<br><b>Última cópia: ${fmtDate(ultimaCopia())}</b>` : '<br><b>Nenhuma cópia feita ainda.</b>'}</div></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn primary" id="cExp">${I.pdf}Fazer cópia agora</button>
+          <label class="btn">Restaurar cópia<input type="file" id="cImp" accept=".json" hidden></label>
+        </div>
+      </div></div>
+    </div>`;
+  $('#cExp').onclick = exportarCopia;
+  $('#cImp').onchange = e => {
+    const f = e.target.files[0]; if (!f) return;
+    f.text().then(t => {
+      try {
+        const d = JSON.parse(t); if (!d.pacientes || !d.settings) throw 0;
+        confirmar('Restaurar os dados desta cópia neste computador? Itens iguais são atualizados; nada é apagado.', () => importar(d, true).then(() => { configMostrada = false; render(); }), 'Restaurar cópia');
+      } catch { toast('Arquivo de cópia inválido', 'erro'); }
+    });
+  };
+}
+function salvarConfig() {
+  const dias = [...document.querySelectorAll('#cDias input:checked')].map(i => +i.value);
+  Object.assign(S.settings, { inicio: $('#cIni').value, fim: $('#cFim').value, dias, valorConsulta: parseValor($('#cValor').value) || 0 });
+  Object.assign(S.settings.prof, { nome: $('#cNome').value.trim(), registro: $('#cReg').value.trim(), especialidade: $('#cEsp').value.trim(), telefone: $('#cTel').value.trim(), endereco: $('#cEnd').value.trim(), social: $('#cSoc').value.trim() });
+  gravarConfig(); configMostrada = false; render(); toast('Configurações salvas');
+}
+
+render();
+iniciar();
+</script>
+</body>
+</html>
